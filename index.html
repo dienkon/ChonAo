@@ -3493,20 +3493,17 @@
 
       window.findUserWithShirtNumber = function (inputNumber, currentStudentName) {
         if (!inputNumber || !inputNumber.toString().trim()) return null;
+        // So sánh chính xác theo chuỗi ký tự (07 khác 007 khác 7)
         const cleanNum = inputNumber.toString().trim().toLowerCase();
-        const numVal = !isNaN(cleanNum) && cleanNum !== "" ? parseInt(cleanNum, 10) : null;
 
         for (const [key, reg] of Object.entries(currentRegistrations || {})) {
           if (!reg || reg.noShirt || !reg.shirtNumber) continue;
           if (reg.fullName && currentStudentName && reg.fullName.trim() === currentStudentName.trim()) continue;
 
           const regNum = String(reg.shirtNumber).trim().toLowerCase();
-          const regNumVal = !isNaN(regNum) && regNum !== "" ? parseInt(regNum, 10) : null;
 
-          const isDirectMatch = regNum === cleanNum;
-          const isNumericMatch = numVal !== null && regNumVal !== null && numVal === regNumVal;
-
-          if (isDirectMatch || isNumericMatch) {
+          // Chỉ trùng khi giống hệt chuỗi (ví dụ: '07' trùng với '07', nhưng '07' KHÔNG trùng với '7' hay '007')
+          if (regNum === cleanNum) {
             return {
               ownerName: reg.fullName || "Một bạn trong lớp",
               ownerNumber: reg.shirtNumber
