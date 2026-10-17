@@ -82,7 +82,6 @@
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
       }
-      /* Custom scrollbar */
       ::-webkit-scrollbar {
         width: 6px;
         height: 6px;
@@ -156,7 +155,7 @@
                 <h2 class="text-xl font-bold text-gray-800">
                   Danh Sách Link Đăng Ký & Bình Chọn
                 </h2>
-                <p class="text-xs text-gray-500">Các link đã tạo trong tài khoản của bạn</p>
+                <p class="text-xs text-gray-500">Các link đã tạo trong tài khoản của bạn (Bấm "⚙️ Chỉnh Sửa" để đổi tên, thêm/đổi ảnh, sửa hạn chót, sửa danh sách tên)</p>
               </div>
               <button onclick="switchAdminTab('create')" class="bg-indigo-600 text-white text-xs font-semibold px-3 py-2 rounded-xl hover:bg-indigo-700 transition flex items-center gap-1 shadow-sm">
                 <span>+</span> Tạo Link Mới
@@ -328,9 +327,7 @@
                   </p>
                 </div>
 
-                <!-- ============================================== -->
-                <!-- BẢNG CHỈNH SỬA CHI TIẾT TỪNG LINE TÊN HỌC SINH -->
-                <!-- ============================================== -->
+                <!-- BẢNG CHỈNH SỬA CHI TIẾT TỪNG LINE TÊN HỌC SINH (KHI TẠO MỚI) -->
                 <div id="names-editor-section" class="mb-6 p-4 bg-gray-50 border border-gray-200 rounded-xl hidden">
                   <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2 mb-3 pb-2 border-b">
                     <div>
@@ -452,7 +449,7 @@
           </p>
         </div>
 
-        <!-- BANNER THÔNG BÁO MẪU ÁO CHIẾN THẮNG (NẾU ĐÃ KẾT THÚC BÌNH CHỌN) -->
+        <!-- BANNER THÔNG BÁO MẪU ÁO CHIẾN THẮNG -->
         <div id="winner-announcement-banner" class="hidden mb-6 p-5 sm:p-6 bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 rounded-2xl text-white shadow-lg relative overflow-hidden">
           <div class="relative z-10 flex flex-col md:flex-row items-center gap-5">
             <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-xl bg-white/20 p-1 shrink-0 overflow-hidden shadow-inner cursor-pointer" onclick="openLightbox(this.querySelector('img').src)">
@@ -510,7 +507,6 @@
 
         <!-- TABS ĐIỀU HƯỚNG CỦA NGƯỜI DÙNG -->
         <div class="flex border-b border-gray-200 mb-6 overflow-x-auto">
-          <!-- Tab Vote: Chỉ hiện khi có chế độ bình chọn -->
           <button class="tab-button" onclick="switchUserTab('vote')" id="user-tab-vote">
             <span>🗳️</span> Bình Chọn Mẫu Áo
           </button>
@@ -522,12 +518,9 @@
           </button>
         </div>
 
-        <!-- ============================================== -->
-        <!-- TAB 1: GIAO DIỆN BÌNH CHỌN MẪU ÁO             -->
-        <!-- ============================================== -->
+        <!-- TAB 1: BÌNH CHỌN MẪU ÁO -->
         <div id="user-content-vote" class="hidden">
           <div class="max-w-4xl mx-auto">
-            <!-- Bước 1: Chọn Họ Tên -->
             <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-custom mb-6">
               <h2 class="text-base font-bold text-gray-800 mb-2 flex items-center gap-2">
                 <span class="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs flex items-center justify-center font-bold">1</span>
@@ -541,7 +534,6 @@
               </div>
             </div>
 
-            <!-- Bước 2: Danh sách các mẫu áo để Vote -->
             <div class="mb-4 flex justify-between items-center">
               <h2 class="text-base font-bold text-gray-800 flex items-center gap-2">
                 <span class="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs flex items-center justify-center font-bold">2</span>
@@ -558,12 +550,9 @@
           </div>
         </div>
 
-        <!-- ============================================== -->
-        <!-- TAB 2: FORM NHẬP THÔNG TIN SIZE ÁO            -->
-        <!-- ============================================== -->
+        <!-- TAB 2: FORM NHẬP THÔNG TIN SIZE ÁO -->
         <div id="user-content-form">
           <div class="max-w-xl mx-auto">
-            <!-- Thông báo nếu đang trong giai đoạn bình chọn chưa mở form -->
             <div id="form-locked-notice" class="hidden mb-6 p-4 bg-amber-50 border border-amber-200 rounded-xl text-amber-800 text-center">
               <span class="text-2xl block mb-1">⏳</span>
               <strong class="font-bold block">Cổng đăng ký thông tin áo chưa mở!</strong>
@@ -576,7 +565,6 @@
             </div>
 
             <div id="registration-form-card" class="bg-white p-6 sm:p-7 rounded-2xl shadow-custom">
-              <!-- Ảnh áo chính thức -->
               <div class="mb-6 img-container cursor-pointer relative group" onclick="openLightbox(document.getElementById('shared-image').src)">
                 <img
                   id="shared-image"
@@ -683,13 +671,10 @@
           </div>
         </div>
 
-        <!-- ============================================== -->
-        <!-- TAB 3: BẢNG TỔNG HỢP & XUẤT FILE EXCEL        -->
-        <!-- ============================================== -->
+        <!-- TAB 3: BẢNG TỔNG HỢP & XUẤT FILE EXCEL -->
         <div id="user-content-table" class="hidden">
           <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-custom mb-6">
             <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-4">
-              <!-- Bộ lọc trạng thái -->
               <div class="flex flex-wrap items-center gap-2">
                 <span class="text-xs font-bold text-gray-600 uppercase tracking-wide mr-1">Lọc:</span>
                 <button
@@ -722,7 +707,7 @@
                 </button>
               </div>
 
-              <!-- CÁC NÚT XUẤT EXCEL CHUYÊN DỤNG (CHỈ CỘT THÔNG TIN ÁO) -->
+              <!-- CÁC NÚT XUẤT EXCEL CHUYÊN DỤNG (CHỈ CỘT LIÊN QUAN ÁO) -->
               <div class="flex flex-wrap items-center gap-2 w-full lg:w-auto">
                 <button
                   onclick="exportToExcelShirtOnly()"
@@ -778,56 +763,228 @@
     </div>
 
     <!-- ============================================== -->
-    <!-- MODAL 1: CHỈNH SỬA DANH SÁCH TÊN (ADMIN)       -->
+    <!-- MODAL TOÀN DIỆN: CHỈNH SỬA CHIẾN DỊCH (ADMIN)  -->
+    <!-- ĐỔI TÊN, THÊM/ĐỔI ẢNH, SỬA HẠN, SỬA DS TÊN     -->
     <!-- ============================================== -->
-    <div id="admin-names-modal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 hidden">
-      <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl max-h-[90vh] flex flex-col">
-        <div class="flex justify-between items-center pb-3 border-b">
+    <div id="admin-edit-campaign-modal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-3 sm:p-5 hidden">
+      <div class="bg-white rounded-3xl max-w-3xl w-full p-5 sm:p-7 shadow-2xl max-h-[92vh] flex flex-col">
+        <!-- Header modal -->
+        <div class="flex justify-between items-start pb-4 border-b">
           <div>
-            <h3 class="font-bold text-lg text-gray-800" id="modal-names-title">
-              Chỉnh Sửa Danh Sách Tên
-            </h3>
-            <p class="text-xs text-gray-500">Cập nhật trực tiếp danh sách học sinh của link này</p>
+            <div class="flex items-center gap-2">
+              <span class="text-xl">⚙️</span>
+              <h3 class="font-extrabold text-lg sm:text-xl text-gray-900" id="edit-modal-header-name">
+                Chỉnh Sửa Chiến Dịch
+              </h3>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">
+              Chỉnh sửa linh hoạt: Đổi tên, thêm/đổi ảnh áo, đổi hạn chót bình chọn, sửa danh sách học sinh.
+            </p>
           </div>
-          <button onclick="closeNamesModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">
+          <button onclick="closeEditCampaignModal()" class="text-gray-400 hover:text-gray-600 text-2xl font-bold p-1">
             &times;
           </button>
         </div>
 
-        <div class="py-3 flex justify-between items-center gap-2">
-          <input
-            type="text"
-            id="modal-search-input"
-            oninput="renderModalNamesList()"
-            placeholder="🔍 Tìm kiếm tên..."
-            class="text-xs p-2 border rounded-lg flex-1"
-          />
-          <button onclick="promptAddNameToModal()" class="text-xs bg-indigo-600 text-white font-semibold px-3 py-2 rounded-lg hover:bg-indigo-700 shrink-0">
-            + Thêm Tên Mới
+        <!-- Tab chuyển đổi trong Modal -->
+        <div class="flex border-b border-gray-200 my-3 overflow-x-auto text-xs sm:text-sm">
+          <button class="tab-button active" onclick="switchEditModalTab('config')" id="edit-tab-btn-config">
+            <span>⚙️</span> Thông Tin & Ảnh Áo
+          </button>
+          <button class="tab-button" onclick="switchEditModalTab('names')" id="edit-tab-btn-names">
+            <span>👥</span> Danh Sách Học Sinh (<span id="edit-modal-names-badge">0</span>)
           </button>
         </div>
 
-        <div class="overflow-y-auto flex-1 border rounded-xl divide-y divide-gray-100 p-2" id="modal-names-list">
-          <!-- Dynamic rows -->
+        <!-- Body modal (Cuộn được) -->
+        <div class="overflow-y-auto flex-1 pr-1 space-y-5">
+          <!-- TAB 1: THÔNG TIN VÀ ẢNH ÁO -->
+          <div id="edit-modal-content-config" class="space-y-5">
+            <!-- 1. Tên chiến dịch -->
+            <div>
+              <label for="edit-modal-name" class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5">
+                Tên Chiến Dịch / Tên Link <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="edit-modal-name"
+                class="w-full p-2.5 border border-gray-300 rounded-xl text-sm font-semibold text-gray-900 focus:ring-2 focus:ring-indigo-500"
+                placeholder="Nhập tên chiến dịch..."
+              />
+            </div>
+
+            <!-- 2. Chế độ chiến dịch -->
+            <div class="p-3.5 bg-gray-50 rounded-xl border border-gray-200">
+              <span class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2">
+                Chế độ chọn áo:
+              </span>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <label class="flex items-center p-2.5 bg-white rounded-lg border cursor-pointer hover:border-indigo-400 text-xs font-semibold text-gray-800">
+                  <input
+                    type="radio"
+                    name="edit-campaign-mode-radio"
+                    id="edit-modal-mode-direct"
+                    value="direct"
+                    onchange="switchEditModalMode(this.value)"
+                    class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                  />
+                  <span class="ml-2">👕 Đăng ký ngay (1 mẫu áo)</span>
+                </label>
+                <label class="flex items-center p-2.5 bg-white rounded-lg border cursor-pointer hover:border-indigo-400 text-xs font-semibold text-indigo-700">
+                  <input
+                    type="radio"
+                    name="edit-campaign-mode-radio"
+                    id="edit-modal-mode-voting"
+                    value="voting"
+                    onchange="switchEditModalMode(this.value)"
+                    class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                  />
+                  <span class="ml-2">🗳️ Bình chọn nhiều mẫu áo</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- 3. Khu vực chế độ 1 mẫu áo (Đổi ảnh) -->
+            <div id="edit-modal-direct-section" class="p-4 bg-white border border-gray-200 rounded-2xl">
+              <label class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2">
+                Ảnh Mẫu Áo Hiện Tại & Đổi Ảnh Mới
+              </label>
+              <div class="flex flex-col sm:flex-row items-center gap-4">
+                <div class="w-28 h-28 bg-gray-100 rounded-xl overflow-hidden border shrink-0 cursor-pointer" onclick="openLightbox(document.getElementById('edit-modal-single-preview').src)">
+                  <img id="edit-modal-single-preview" src="" alt="Ảnh áo" class="w-full h-full object-cover" />
+                </div>
+                <div class="flex-1 w-full space-y-2">
+                  <input
+                    type="file"
+                    id="edit-modal-single-file"
+                    accept="image/*"
+                    onchange="handleEditSingleFileChange(this)"
+                    class="block w-full text-xs text-gray-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer"
+                  />
+                  <p id="edit-modal-single-status" class="text-xs text-gray-500 font-medium">
+                    Chọn ảnh mới để thay thế ảnh hiện tại.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 4. Khu vực chế độ bình chọn (Nhiều mẫu áo, Hạn chót, Trạng thái đóng/mở) -->
+            <div id="edit-modal-voting-section" class="space-y-4 hidden">
+              <!-- Hạn chót & trạng thái -->
+              <div class="p-4 bg-amber-50/70 border border-amber-200 rounded-2xl space-y-3">
+                <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2">
+                  <div>
+                    <span class="block text-xs font-bold text-amber-900 uppercase tracking-wide">
+                      ⏰ Hạn Chót Bình Chọn
+                    </span>
+                    <p class="text-xs text-amber-700">Tự động đóng cổng khi hết hạn</p>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-xs font-semibold text-gray-600">Trạng thái:</span>
+                    <button
+                      type="button"
+                      id="edit-modal-voting-status-toggle"
+                      onclick="toggleEditVotingStatus()"
+                      class="text-xs font-bold px-3 py-1.5 rounded-lg transition"
+                    >
+                      Đang mở vote
+                    </button>
+                  </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-2 items-start sm:items-center">
+                  <input
+                    type="datetime-local"
+                    id="edit-modal-deadline"
+                    class="p-2 border border-gray-300 rounded-lg text-xs bg-white focus:ring-2 focus:ring-amber-500 font-medium"
+                  />
+                  <div class="flex gap-1 text-xs">
+                    <button type="button" onclick="setEditDeadlinePreset(1)" class="px-2 py-1 bg-white border rounded-lg hover:bg-gray-50 text-gray-700 font-medium">+1 ngày</button>
+                    <button type="button" onclick="setEditDeadlinePreset(3)" class="px-2 py-1 bg-white border rounded-lg hover:bg-gray-50 text-gray-700 font-medium">+3 ngày</button>
+                    <button type="button" onclick="setEditDeadlinePreset(7)" class="px-2 py-1 bg-white border rounded-lg hover:bg-gray-50 text-gray-700 font-medium">+1 tuần</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Danh sách các mẫu áo bình chọn -->
+              <div>
+                <div class="flex justify-between items-center mb-2.5">
+                  <span class="text-xs font-bold text-gray-700 uppercase tracking-wide">
+                    Danh Sách Các Mẫu Áo Trong Chiến Dịch:
+                  </span>
+                  <button
+                    type="button"
+                    onclick="addEditModalShirtField()"
+                    class="text-xs bg-indigo-600 text-white font-bold px-3 py-1.5 rounded-lg hover:bg-indigo-700 transition flex items-center gap-1 shadow-sm"
+                  >
+                    <span>+</span> Thêm Mẫu Áo Mới
+                  </button>
+                </div>
+
+                <div id="edit-modal-shirts-list" class="space-y-3">
+                  <!-- Rendered dynamically -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 2: DANH SÁCH HỌC SINH -->
+          <div id="edit-modal-content-names" class="space-y-4 hidden">
+            <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2">
+              <div class="flex-1">
+                <input
+                  type="text"
+                  id="edit-modal-search-names"
+                  oninput="renderEditModalNames()"
+                  placeholder="🔍 Tìm kiếm học sinh..."
+                  class="w-full text-xs p-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-indigo-500"
+                />
+              </div>
+              <div class="flex gap-2">
+                <button
+                  type="button"
+                  onclick="promptAddNameToEditModal()"
+                  class="text-xs bg-indigo-600 text-white font-bold px-3 py-2 rounded-lg hover:bg-indigo-700 transition flex items-center gap-1 shadow-sm"
+                >
+                  <span>+</span> Thêm Tên Mới
+                </button>
+              </div>
+            </div>
+
+            <div class="border rounded-2xl divide-y divide-gray-100 max-h-72 overflow-y-auto p-2 bg-gray-50" id="edit-modal-names-list">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
         </div>
 
-        <div class="pt-4 border-t mt-3 flex justify-between items-center">
-          <span class="text-xs text-gray-500" id="modal-names-count">Tổng: 0 tên</span>
-          <div class="flex gap-2">
-            <button onclick="closeNamesModal()" class="text-xs px-4 py-2 border rounded-xl hover:bg-gray-50 text-gray-700 font-semibold">
+        <!-- Footer modal -->
+        <div class="pt-4 border-t mt-4 flex justify-between items-center">
+          <div class="text-xs text-gray-500">
+            Các thay đổi sẽ cập nhật trực tiếp đến học sinh đang truy cập link.
+          </div>
+          <div class="flex gap-2.5">
+            <button
+              type="button"
+              onclick="closeEditCampaignModal()"
+              class="text-xs sm:text-sm px-4 py-2.5 border border-gray-300 rounded-xl hover:bg-gray-50 font-semibold text-gray-700 transition"
+            >
               Hủy
             </button>
-            <button onclick="saveModalNamesToFirebase()" class="text-xs px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold shadow-md shadow-indigo-100" id="modal-save-btn">
-              💾 Lưu Cập Nhật
+            <button
+              type="button"
+              id="edit-modal-save-btn"
+              onclick="saveCampaignChanges()"
+              class="text-xs sm:text-sm px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold transition flex items-center justify-center shadow-lg shadow-indigo-100"
+            >
+              <div id="edit-modal-save-loader" class="loader"></div>
+              <span id="edit-modal-save-btn-text">💾 Lưu Tất Cả Thay Đổi</span>
             </button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ============================================== -->
-    <!-- MODAL 2: LIGHTBOX PHÓNG TO ẢNH                 -->
-    <!-- ============================================== -->
+    <!-- MODAL LIGHTBOX PHÓNG TO ẢNH -->
     <div id="image-lightbox" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden" onclick="closeLightbox()">
       <div class="relative max-w-3xl max-h-[90vh]" onclick="event.stopPropagation()">
         <button onclick="closeLightbox()" class="absolute -top-10 right-0 text-white text-3xl font-bold hover:text-gray-300">
@@ -873,7 +1030,7 @@
       let currentConfig = null;
       let currentId = null;
 
-      // Cloudinary Config (giữ nguyên của user)
+      // Cloudinary Config
       const CLOUDINARY_CLOUD_NAME = "dys3wgutz";
       const CLOUDINARY_UPLOAD_PRESET = "comic_images_preset";
 
@@ -883,7 +1040,18 @@
         { id: "shirt_1", name: "Mẫu 1 - Áo Đen Cổ Tròn", file: null, previewUrl: "" },
         { id: "shirt_2", name: "Mẫu 2 - Áo Trắng Polo", file: null, previewUrl: "" }
       ];
-      let campaignMode = "direct"; // "direct" hoặc "voting"
+      let campaignMode = "direct";
+
+      // Trạng thái Chỉnh sửa Admin Modal
+      let editingConfigId = null;
+      let editingConfig = null;
+      let editingCampaignMode = "direct";
+      let editingNames = [];
+      let editingSingleImageFile = null;
+      let editingSingleImagePreview = "";
+      let editingShirts = [];
+      let editingVotingDeadline = "";
+      let editingVotingStatus = "open";
 
       // Trạng thái User
       let currentRegistrations = {};
@@ -959,10 +1127,10 @@
         return String(s)
           .toLowerCase()
           .normalize("NFD")
-          .replace(/[\u0300-\u036f]/g, "") // Xóa dấu tiếng Việt
+          .replace(/[\u0300-\u036f]/g, "")
           .replace(/đ/g, "d")
-          .replace(/[^a-z0-9]/g, " ")     // Thay ký tự đặc biệt bằng khoảng trắng
-          .replace(/\s+/g, " ")            // Gộp khoảng trắng
+          .replace(/[^a-z0-9]/g, " ")
+          .replace(/\s+/g, " ")
           .trim();
       }
 
@@ -975,7 +1143,6 @@
               const data = new Uint8Array(e.target.result);
               const workbook = XLSX.read(data, { type: "array" });
 
-              // Tìm sheet đầu tiên có dữ liệu
               let worksheet = null;
               let json = [];
               for (const sName of workbook.SheetNames) {
@@ -997,7 +1164,6 @@
               let hoColIndex = -1;
               let tenColIndex = -1;
 
-              // Các mẫu nhận diện cột Họ và Tên đơn lẻ
               const fullNamePatterns = [
                 "ho va ten", "ho ten", "ho & ten", "ho ten", "ho ten hoc sinh",
                 "ho va ten hoc sinh", "ho va ten sinh vien", "ho ten sinh vien",
@@ -1007,7 +1173,6 @@
                 "ho ten nguoi hoc", "ho va ten nguoi hoc"
               ];
 
-              // Các mẫu nhận diện tách cột "Họ / Họ lót / Họ đệm" và "Tên"
               const hoPatterns = [
                 "ho va ten dem", "ho va dem", "ho dem", "ho lot", "ho va ten lot", "ho va chu lot", "ho"
               ];
@@ -1015,10 +1180,8 @@
                 "ten", "ten goi", "ten hoc sinh", "ten sinh vien", "first name"
               ];
 
-              // Quét tìm trong 35 hàng đầu tiên
               const scanLimit = Math.min(json.length, 35);
 
-              // 1. Tìm khớp chính xác với fullNamePatterns
               for (let i = 0; i < scanLimit; i++) {
                 const row = json[i] || [];
                 const rowNorm = row.map(c => normalizeHeaderStr(c));
@@ -1033,7 +1196,6 @@
                 }
                 if (headerRowIndex !== -1) break;
 
-                // 2. Kiểm tra tách cột Họ và Tên riêng biệt
                 let hIdx = -1;
                 let tIdx = -1;
                 for (let j = 0; j < rowNorm.length; j++) {
@@ -1053,7 +1215,6 @@
                 }
               }
 
-              // 3. Nếu chưa thấy, tìm nới lỏng (loose match) chứa "ho va ten", "ho ten", "fullname"
               if (headerRowIndex === -1) {
                 for (let i = 0; i < scanLimit; i++) {
                   const row = json[i] || [];
@@ -1077,7 +1238,6 @@
                 }
               }
 
-              // 4. Heuristic Fallback: Quét cột chứa nhiều họ tên người Việt Nam nhất
               if (headerRowIndex === -1) {
                 let bestCol = -1;
                 let bestScore = 0;
@@ -1115,7 +1275,6 @@
                 return reject("Không tìm thấy cột Họ và Tên trong file Excel. Vui lòng kiểm tra lại file hoặc thêm tên thủ công.");
               }
 
-              // Trích xuất danh sách tên
               const names = [];
               const ignoredKeywords = ["tong cong", "giao vien", "hieu truong", "ky ten", "chu nhiem", "stt", "so thu tu", "ghi chu", "ngay sinh"];
 
@@ -1132,7 +1291,6 @@
                 }
 
                 fullName = fullName.replace(/\s+/g, " ");
-
                 if (!fullName) continue;
 
                 const norm = normalizeHeaderStr(fullName);
@@ -1159,7 +1317,7 @@
       }
 
       // ==============================================================
-      // 2. CHỈNH SỬA CHI TIẾT TỪNG LINE TÊN TRONG ADMIN
+      // 2. CHỈNH SỬA CHI TIẾT TỪNG LINE TÊN (KHI TẠO LINK MỚI)
       // ==============================================================
 
       function renderNamesList() {
@@ -1180,9 +1338,7 @@
         }
 
         excelNames.forEach((name, idx) => {
-          if (searchVal && !normalizeHeaderStr(name).includes(searchVal)) {
-            return;
-          }
+          if (searchVal && !normalizeHeaderStr(name).includes(searchVal)) return;
 
           const itemDiv = document.createElement("div");
           itemDiv.className = "flex items-center justify-between py-1.5 px-2 hover:bg-white rounded-lg transition text-xs";
@@ -1276,7 +1432,7 @@
       };
 
       // ==============================================================
-      // 3. QUẢN LÝ MẪU ÁO TRONG CHẾ ĐỘ BÌNH CHỌN (ADMIN)
+      // 3. QUẢN LÝ MẪU ÁO TRONG CHẾ ĐỘ BÌNH CHỌN (ADMIN TẠO MỚI)
       // ==============================================================
 
       window.onCampaignModeChange = function (mode) {
@@ -1348,7 +1504,6 @@
           `;
           container.appendChild(card);
 
-          // Preview mini cards
           if (prevGrid) {
             const mini = document.createElement("div");
             mini.className = "border rounded-lg p-1.5 bg-white text-center";
@@ -1407,7 +1562,7 @@
       window.setDeadlinePreset = function (days) {
         const now = new Date();
         now.setDate(now.getDate() + days);
-        now.setHours(20, 0, 0, 0); // Đặt mặc định 20:00
+        now.setHours(20, 0, 0, 0);
         const pad = (n) => String(n).padStart(2, "0");
         const iso = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
         document.getElementById("voting-deadline").value = iso;
@@ -1588,8 +1743,8 @@
               <button onclick="window.open('${shareLink}&tab=table', '_blank')" class="bg-blue-600 text-white px-2.5 py-1 rounded-lg text-xs font-semibold hover:bg-blue-700 transition" title="Xem bảng đăng ký">
                 Bảng DS
               </button>
-              <button onclick="openEditNamesModal('${config.id}')" class="bg-amber-500 text-white px-2.5 py-1 rounded-lg text-xs font-semibold hover:bg-amber-600 transition" title="Chỉnh sửa chi tiết danh sách tên">
-                ✏️ Sửa Tên
+              <button onclick="openEditCampaignModal('${config.id}')" class="bg-amber-500 text-white px-2.5 py-1 rounded-lg text-xs font-semibold hover:bg-amber-600 transition shadow-sm" title="Chỉnh sửa toàn diện: Tên, Thêm/Đổi ảnh, Mẫu áo, Hạn chót, DS học sinh">
+                ⚙️ Chỉnh Sửa
               </button>
               <button onclick="deleteLinkConfig('${config.id}')" class="bg-gray-200 text-gray-700 px-2 py-1 rounded-lg text-xs font-semibold hover:bg-red-100 hover:text-red-600 transition" title="Xóa toàn bộ">
                 ✕
@@ -1597,7 +1752,6 @@
             </td>
           `;
 
-          // Tải số lượng đăng ký thực tế
           get(ref(db, getRegistrationPath(config.id))).then((snapshot) => {
             const regs = snapshot.val() || {};
             const count = Object.keys(regs).length;
@@ -1607,7 +1761,6 @@
             }
           });
 
-          // Tải trạng thái voting nếu có
           if (isVoting) {
             get(ref(db, getVotingPath(config.id))).then((snapshot) => {
               const vData = snapshot.val() || {};
@@ -1646,7 +1799,6 @@
         }
       };
 
-      // Tải ảnh lên Cloudinary
       async function uploadImage(file) {
         if (!file) return "";
         if (
@@ -1671,7 +1823,6 @@
           return result.secure_url;
         } catch (error) {
           console.error("Lỗi Cloudinary:", error);
-          // Fallback object URL
           return URL.createObjectURL(file);
         }
       }
@@ -1685,7 +1836,6 @@
           const imageFile = document.getElementById("image-input").files[0];
           isReady = isReady && !!imageFile;
         } else {
-          // Voting mode: cần ít nhất 2 mẫu áo có tên và ảnh
           const validShirts = votingShirts.filter(s => s.name.trim() && (s.file || s.previewUrl));
           isReady = isReady && validShirts.length >= 2;
         }
@@ -1696,7 +1846,6 @@
 
       document.getElementById("link-name")?.addEventListener("input", checkAdminReadiness);
 
-      // Xử lý upload Excel
       document.getElementById("excel-input")?.addEventListener("change", async (e) => {
         const file = e.target.files[0];
         if (!file) {
@@ -1723,7 +1872,6 @@
         }
       });
 
-      // Xử lý upload ảnh (1 mẫu áo)
       document.getElementById("image-input")?.addEventListener("change", (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -1767,7 +1915,6 @@
             const uploadedUrl = await uploadImage(imageFile);
             config.imageUrl = uploadedUrl;
           } else {
-            // Chế độ bình chọn nhiều mẫu
             const deadlineVal = document.getElementById("voting-deadline").value;
             config.votingDeadline = deadlineVal ? new Date(deadlineVal).toISOString() : "";
             config.votingStatus = "open";
@@ -1790,7 +1937,6 @@
             config.shirts = uploadedShirts;
             config.imageUrl = uploadedShirts[0].imageUrl;
 
-            // Khởi tạo node voting công khai trên RTDB
             const votingRef = ref(db, getVotingPath(uniqueId));
             await set(votingRef, {
               status: "open",
@@ -1800,14 +1946,12 @@
             });
           }
 
-          // Lưu cấu hình vào RTDB của Admin
           document.querySelector("#generate-link-btn span").textContent = "Đang lưu cấu hình...";
           const configRef = ref(db, `${getAdminConfigsPath()}/${uniqueId}`);
           await set(configRef, config);
 
           showToast(`Đã tạo chiến dịch "${linkName}" thành công!`);
 
-          // Reset form
           document.getElementById("link-name").value = "";
           document.getElementById("image-input").value = "";
           document.getElementById("excel-input").value = "";
@@ -1847,61 +1991,255 @@
       }
 
       // ==============================================================
-      // 6. MODAL CHỈNH SỬA TÊN CỦA LINK ĐÃ TẠO (ADMIN)
+      // 6. MODAL CHỈNH SỬA TOÀN DIỆN CHIẾN DỊCH (KHI ĐÃ XUẤT LINK)
       // ==============================================================
 
-      let editingConfigId = null;
-      let modalNamesData = [];
-
-      window.openEditNamesModal = async function (configId) {
+      window.openEditCampaignModal = async function (configId) {
         editingConfigId = configId;
         const configRef = ref(db, `${getAdminConfigsPath()}/${configId}`);
         const snap = await get(configRef);
         if (!snap.exists()) {
-          showToast("Không tìm thấy cấu hình link.", true);
+          showToast("Không tìm thấy thông tin chiến dịch.", true);
           return;
         }
 
-        const config = snap.val();
-        modalNamesData = [...(config.names || [])];
+        editingConfig = snap.val();
+        editingCampaignMode = editingConfig.hasVoting ? "voting" : "direct";
+        editingNames = [...(editingConfig.names || [])];
+        editingSingleImageFile = null;
+        editingSingleImagePreview = editingConfig.imageUrl || "";
 
-        document.getElementById("modal-names-title").textContent = `Chỉnh Sửa DS Tên - ${config.name}`;
-        document.getElementById("admin-names-modal").classList.remove("hidden");
-        renderModalNamesList();
+        if (editingConfig.shirts && editingConfig.shirts.length > 0) {
+          editingShirts = editingConfig.shirts.map(s => ({
+            id: s.id,
+            name: s.name,
+            imageUrl: s.imageUrl,
+            previewUrl: s.imageUrl,
+            newFile: null
+          }));
+        } else {
+          editingShirts = [
+            { id: "shirt_1", name: "Mẫu 1 - Áo Đen Cổ Tròn", imageUrl: editingConfig.imageUrl || "", previewUrl: editingConfig.imageUrl || "", newFile: null },
+            { id: "shirt_2", name: "Mẫu 2 - Áo Trắng Polo", imageUrl: "", previewUrl: "", newFile: null }
+          ];
+        }
+
+        editingVotingDeadline = editingConfig.votingDeadline || "";
+        editingVotingStatus = editingConfig.votingStatus || "open";
+
+        // Điền vào Form
+        document.getElementById("edit-modal-header-name").textContent = editingConfig.name;
+        document.getElementById("edit-modal-name").value = editingConfig.name;
+
+        if (editingCampaignMode === "voting") {
+          document.getElementById("edit-modal-mode-voting").checked = true;
+          switchEditModalMode("voting");
+        } else {
+          document.getElementById("edit-modal-mode-direct").checked = true;
+          switchEditModalMode("direct");
+        }
+
+        // Single shirt
+        document.getElementById("edit-modal-single-preview").src = editingSingleImagePreview || "https://placehold.co/400x400/e0e7ff/4338ca?text=Chưa+có+ảnh";
+        document.getElementById("edit-modal-single-status").textContent = "Đang dùng ảnh hiện tại.";
+        document.getElementById("edit-modal-single-file").value = "";
+
+        // Voting deadline
+        if (editingVotingDeadline) {
+          const d = new Date(editingVotingDeadline);
+          const pad = n => String(n).padStart(2, "0");
+          document.getElementById("edit-modal-deadline").value = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+        } else {
+          document.getElementById("edit-modal-deadline").value = "";
+        }
+
+        updateEditModalVotingStatusBadge();
+        renderEditModalShirts();
+        renderEditModalNames();
+
+        switchEditModalTab("config");
+        document.getElementById("admin-edit-campaign-modal").classList.remove("hidden");
       };
 
-      window.closeNamesModal = function () {
-        document.getElementById("admin-names-modal").classList.add("hidden");
+      window.closeEditCampaignModal = function () {
+        document.getElementById("admin-edit-campaign-modal").classList.add("hidden");
         editingConfigId = null;
-        modalNamesData = [];
+        editingConfig = null;
+        editingShirts = [];
+        editingNames = [];
+        editingSingleImageFile = null;
       };
 
-      function renderModalNamesList() {
-        const container = document.getElementById("modal-names-list");
-        const countEl = document.getElementById("modal-names-count");
-        const search = normalizeHeaderStr(document.getElementById("modal-search-input").value || "");
+      window.switchEditModalTab = function (tab) {
+        document.getElementById("edit-modal-content-config").classList.add("hidden");
+        document.getElementById("edit-modal-content-names").classList.add("hidden");
+        document.getElementById("edit-tab-btn-config").classList.remove("active");
+        document.getElementById("edit-tab-btn-names").classList.remove("active");
 
-        countEl.textContent = `Tổng cộng: ${modalNamesData.length} học sinh`;
+        if (tab === "config") {
+          document.getElementById("edit-modal-content-config").classList.remove("hidden");
+          document.getElementById("edit-tab-btn-config").classList.add("active");
+        } else {
+          document.getElementById("edit-modal-content-names").classList.remove("hidden");
+          document.getElementById("edit-tab-btn-names").classList.add("active");
+        }
+      };
+
+      window.switchEditModalMode = function (mode) {
+        editingCampaignMode = mode;
+        const dirSec = document.getElementById("edit-modal-direct-section");
+        const voteSec = document.getElementById("edit-modal-voting-section");
+        if (mode === "voting") {
+          dirSec.classList.add("hidden");
+          voteSec.classList.remove("hidden");
+          renderEditModalShirts();
+        } else {
+          dirSec.classList.remove("hidden");
+          voteSec.classList.add("hidden");
+        }
+      };
+
+      window.handleEditSingleFileChange = function (input) {
+        const file = input.files[0];
+        if (file) {
+          editingSingleImageFile = file;
+          editingSingleImagePreview = URL.createObjectURL(file);
+          document.getElementById("edit-modal-single-preview").src = editingSingleImagePreview;
+          document.getElementById("edit-modal-single-status").textContent = `Đã chọn ảnh mới: ${file.name}`;
+        }
+      };
+
+      function updateEditModalVotingStatusBadge() {
+        const btn = document.getElementById("edit-modal-voting-status-toggle");
+        if (!btn) return;
+        if (editingVotingStatus === "closed") {
+          btn.className = "text-xs font-bold px-3 py-1.5 rounded-lg bg-red-100 text-red-700 hover:bg-red-200 transition";
+          btn.textContent = "🔒 Đã Đóng Vote (Bấm để Mở)";
+        } else {
+          btn.className = "text-xs font-bold px-3 py-1.5 rounded-lg bg-emerald-100 text-emerald-700 hover:bg-emerald-200 transition";
+          btn.textContent = "🟢 Đang Mở Vote (Bấm để Đóng)";
+        }
+      }
+
+      window.toggleEditVotingStatus = function () {
+        editingVotingStatus = editingVotingStatus === "open" ? "closed" : "open";
+        updateEditModalVotingStatusBadge();
+      };
+
+      window.setEditDeadlinePreset = function (days) {
+        const now = new Date();
+        now.setDate(now.getDate() + days);
+        now.setHours(20, 0, 0, 0);
+        const pad = n => String(n).padStart(2, "0");
+        document.getElementById("edit-modal-deadline").value = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
+      };
+
+      function renderEditModalShirts() {
+        const container = document.getElementById("edit-modal-shirts-list");
+        if (!container) return;
         container.innerHTML = "";
 
-        if (modalNamesData.length === 0) {
-          container.innerHTML = `<div class="text-center py-4 text-xs text-gray-400">Danh sách rỗng.</div>`;
+        editingShirts.forEach((shirt, idx) => {
+          const card = document.createElement("div");
+          card.className = "p-3 bg-white border border-gray-200 rounded-xl flex flex-col sm:flex-row items-start sm:items-center gap-3";
+          card.innerHTML = `
+            <div class="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden border shrink-0 relative cursor-pointer" onclick="openLightbox('${shirt.previewUrl}')">
+              <img src="${shirt.previewUrl || 'https://placehold.co/200x200/e0e7ff/4338ca?text=Ảnh+' + (idx + 1)}" class="w-full h-full object-cover" />
+            </div>
+            <div class="flex-1 w-full space-y-1.5">
+              <div class="flex justify-between items-center">
+                <span class="text-[11px] font-bold text-indigo-600 uppercase">Mẫu Áo #${idx + 1}</span>
+                ${
+                  editingShirts.length > 2
+                    ? `<button type="button" onclick="removeEditModalShirt('${shirt.id}')" class="text-xs text-red-500 hover:text-red-700 font-semibold">✕ Xóa</button>`
+                    : ""
+                }
+              </div>
+              <input
+                type="text"
+                value="${escapeHtml(shirt.name)}"
+                oninput="updateEditModalShirtName('${shirt.id}', this.value)"
+                class="w-full p-1.5 border border-gray-300 rounded-lg text-xs font-semibold focus:ring-1 focus:ring-indigo-500 bg-white"
+                placeholder="Tên mẫu áo..."
+              />
+              <div class="flex items-center gap-2">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onchange="handleEditModalShirtFile('${shirt.id}', this)"
+                  class="block w-full text-[11px] text-gray-500 file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-[11px] file:font-semibold file:bg-indigo-50 file:text-indigo-700 cursor-pointer"
+                />
+              </div>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+      }
+
+      window.addEditModalShirtField = function () {
+        const nextIdx = editingShirts.length + 1;
+        editingShirts.push({
+          id: `shirt_${Date.now()}_${nextIdx}`,
+          name: `Mẫu ${nextIdx} - Áo Mới`,
+          imageUrl: "",
+          previewUrl: "",
+          newFile: null
+        });
+        renderEditModalShirts();
+      };
+
+      window.removeEditModalShirt = function (shirtId) {
+        if (editingShirts.length <= 2) {
+          showToast("Cần tối thiểu 2 mẫu áo để bình chọn.", true);
+          return;
+        }
+        editingShirts = editingShirts.filter(s => s.id !== shirtId);
+        renderEditModalShirts();
+      };
+
+      window.updateEditModalShirtName = function (shirtId, name) {
+        const s = editingShirts.find(item => item.id === shirtId);
+        if (s) s.name = name;
+      };
+
+      window.handleEditModalShirtFile = function (shirtId, input) {
+        const file = input.files[0];
+        const s = editingShirts.find(item => item.id === shirtId);
+        if (s && file) {
+          s.newFile = file;
+          s.previewUrl = URL.createObjectURL(file);
+          renderEditModalShirts();
+        }
+      };
+
+      // Danh sách học sinh trong Modal
+      function renderEditModalNames() {
+        const container = document.getElementById("edit-modal-names-list");
+        const badge = document.getElementById("edit-modal-names-badge");
+        const search = normalizeHeaderStr(document.getElementById("edit-modal-search-names")?.value || "");
+
+        if (badge) badge.textContent = editingNames.length;
+        if (!container) return;
+        container.innerHTML = "";
+
+        if (editingNames.length === 0) {
+          container.innerHTML = `<div class="text-center py-4 text-xs text-gray-400">Danh sách học sinh rỗng.</div>`;
           return;
         }
 
-        modalNamesData.forEach((name, idx) => {
+        editingNames.forEach((name, idx) => {
           if (search && !normalizeHeaderStr(name).includes(search)) return;
 
           const row = document.createElement("div");
-          row.className = "flex items-center justify-between py-1.5 px-2 hover:bg-gray-50 text-xs";
+          row.className = "flex items-center justify-between py-1.5 px-2 hover:bg-white rounded-lg transition text-xs";
           row.innerHTML = `
             <div class="flex items-center space-x-2 flex-1 mr-2">
-              <span class="font-mono text-gray-400 w-6 text-right">${idx + 1}.</span>
+              <span class="font-mono text-gray-400 w-6 text-right shrink-0">${idx + 1}.</span>
               <span class="font-semibold text-gray-800 truncate">${escapeHtml(name)}</span>
             </div>
             <div class="flex items-center space-x-1 shrink-0">
-              <button onclick="editModalNameItem(${idx})" class="text-indigo-600 hover:text-indigo-800 p-1 font-medium">✏️ Sửa</button>
-              <button onclick="deleteModalNameItem(${idx})" class="text-red-500 hover:text-red-700 p-1 font-medium">🗑️ Xóa</button>
+              <button type="button" onclick="editModalNameItem(${idx})" class="text-indigo-600 hover:text-indigo-800 p-1 font-medium">✏️ Sửa</button>
+              <button type="button" onclick="deleteModalNameItem(${idx})" class="text-red-500 hover:text-red-700 p-1 font-medium">🗑️ Xóa</button>
             </div>
           `;
           container.appendChild(row);
@@ -1909,45 +2247,123 @@
       }
 
       window.editModalNameItem = function (idx) {
-        const current = modalNamesData[idx];
+        const current = editingNames[idx];
         const newName = window.prompt("Nhập họ và tên mới:", current);
         if (newName && newName.trim()) {
-          modalNamesData[idx] = newName.trim();
-          renderModalNamesList();
+          editingNames[idx] = newName.trim();
+          renderEditModalNames();
         }
       };
 
       window.deleteModalNameItem = function (idx) {
-        modalNamesData.splice(idx, 1);
-        renderModalNamesList();
+        editingNames.splice(idx, 1);
+        renderEditModalNames();
       };
 
-      window.promptAddNameToModal = function () {
+      window.promptAddNameToEditModal = function () {
         const name = window.prompt("Nhập họ và tên học sinh cần thêm:");
         if (name && name.trim()) {
-          modalNamesData.push(name.trim());
-          renderModalNamesList();
+          editingNames.push(name.trim());
+          renderEditModalNames();
         }
       };
 
-      window.saveModalNamesToFirebase = async function () {
+      // Lưu toàn bộ chỉnh sửa chiến dịch
+      window.saveCampaignChanges = async function () {
         if (!editingConfigId) return;
-        const btn = document.getElementById("modal-save-btn");
-        btn.disabled = true;
-        btn.textContent = "Đang lưu...";
+
+        const newName = document.getElementById("edit-modal-name").value.trim();
+        if (!newName) {
+          showToast("Tên chiến dịch không được để trống.", true);
+          switchEditModalTab("config");
+          document.getElementById("edit-modal-name").focus();
+          return;
+        }
+
+        if (editingNames.length === 0) {
+          showToast("Danh sách học sinh không được để trống.", true);
+          switchEditModalTab("names");
+          return;
+        }
+
+        const saveBtn = document.getElementById("edit-modal-save-btn");
+        const saveLoader = document.getElementById("edit-modal-save-loader");
+        const saveBtnText = document.getElementById("edit-modal-save-btn-text");
+
+        saveBtn.disabled = true;
+        saveLoader.style.display = "block";
+        saveBtnText.textContent = "Đang xử lý...";
 
         try {
-          const configRef = ref(db, `${getAdminConfigsPath()}/${editingConfigId}`);
-          await update(configRef, { names: modalNamesData });
-          showToast("Đã lưu cập nhật danh sách tên!");
-          closeNamesModal();
+          let finalImageUrl = editingSingleImagePreview;
+
+          if (editingCampaignMode === "direct") {
+            if (editingSingleImageFile) {
+              saveBtnText.textContent = "Đang tải ảnh áo mới...";
+              finalImageUrl = await uploadImage(editingSingleImageFile);
+            }
+          } else {
+            const valid = editingShirts.filter(s => s.name.trim() && (s.imageUrl || s.previewUrl || s.newFile));
+            if (valid.length < 2) {
+              throw new Error("Chế độ bình chọn cần tối thiểu 2 mẫu áo hợp lệ.");
+            }
+
+            saveBtnText.textContent = "Đang tải các mẫu áo mới...";
+            for (let i = 0; i < editingShirts.length; i++) {
+              const s = editingShirts[i];
+              if (s.newFile) {
+                s.imageUrl = await uploadImage(s.newFile);
+                s.previewUrl = s.imageUrl;
+                s.newFile = null;
+              } else if (!s.imageUrl && s.previewUrl) {
+                s.imageUrl = s.previewUrl;
+              }
+            }
+            finalImageUrl = editingShirts[0].imageUrl;
+          }
+
+          saveBtnText.textContent = "Đang cập nhật Firebase...";
+
+          const deadlineVal = document.getElementById("edit-modal-deadline").value;
+          const finalDeadline = deadlineVal ? new Date(deadlineVal).toISOString() : "";
+
+          const updatedConfig = {
+            ...editingConfig,
+            name: newName,
+            names: editingNames,
+            imageUrl: finalImageUrl,
+            hasVoting: editingCampaignMode === "voting",
+            lastUpdated: new Date().toISOString()
+          };
+
+          if (editingCampaignMode === "voting") {
+            updatedConfig.votingDeadline = finalDeadline;
+            updatedConfig.votingStatus = editingVotingStatus;
+            updatedConfig.shirts = editingShirts.map(s => ({
+              id: s.id,
+              name: s.name.trim() || "Mẫu Áo",
+              imageUrl: s.imageUrl
+            }));
+
+            await update(ref(db, getVotingPath(editingConfigId)), {
+              deadline: finalDeadline,
+              status: editingVotingStatus,
+              shirts: updatedConfig.shirts
+            });
+          }
+
+          await set(ref(db, `${getAdminConfigsPath()}/${editingConfigId}`), updatedConfig);
+
+          showToast("Đã lưu toàn bộ thay đổi cho chiến dịch!");
+          closeEditCampaignModal();
           setupAdminConfigsListener();
-        } catch (err) {
-          console.error("Lỗi cập nhật tên:", err);
-          showToast("Lỗi khi lưu dữ liệu.", true);
+        } catch (error) {
+          console.error("Lỗi khi lưu chiến dịch:", error);
+          showToast(error.message || "Lỗi khi lưu dữ liệu.", true);
         } finally {
-          btn.disabled = false;
-          btn.textContent = "💾 Lưu Cập Nhật";
+          saveBtn.disabled = false;
+          saveLoader.style.display = "none";
+          saveBtnText.textContent = "💾 Lưu Tất Cả Thay Đổi";
         }
       };
 
@@ -1982,7 +2398,6 @@
         }
       };
 
-      // Kiểm tra trạng thái bình chọn (Open hay Closed)
       function isVotingClosed() {
         if (!currentConfig || !currentConfig.hasVoting) return true;
         if (currentVotingData.status === "closed") return true;
@@ -1994,7 +2409,6 @@
         return false;
       }
 
-      // Khởi động đồng hồ đếm ngược
       function startVotingCountdown() {
         if (votingTimerInterval) clearInterval(votingTimerInterval);
 
@@ -2033,7 +2447,6 @@
         votingTimerInterval = setInterval(updateClock, 1000);
       }
 
-      // Tính toán mẫu áo chiến thắng
       function calculateWinningShirt() {
         if (!currentConfig || !currentConfig.shirts || currentConfig.shirts.length === 0) return null;
 
@@ -2061,7 +2474,6 @@
         return { ...winner, voteCount: maxVotes };
       }
 
-      // Cập nhật giao diện theo trạng thái Bình chọn
       function applyVotingStateUI() {
         if (!currentConfig) return;
 
@@ -2073,7 +2485,6 @@
         const regCard = document.getElementById("registration-form-card");
 
         if (!isVoting) {
-          // Không có bình chọn
           voteTab.classList.add("hidden");
           activeBanner.classList.add("hidden");
           winnerBanner.classList.add("hidden");
@@ -2087,7 +2498,6 @@
         const closed = isVotingClosed();
 
         if (closed) {
-          // BÌNH CHỌN ĐÃ ĐÓNG: CHỐT MẪU VÀ MỞ CỔNG ĐĂNG KÝ THÔNG TIN ÁO
           activeBanner.classList.add("hidden");
           winnerBanner.classList.remove("hidden");
           formLockedNotice.classList.add("hidden");
@@ -2100,13 +2510,11 @@
             document.getElementById("winner-banner-desc").textContent =
               `Mẫu áo này đã chiến thắng với ${currentWinnerShirt.voteCount} lượt bình chọn từ các thành viên.`;
 
-            // Cập nhật form đăng ký dùng ảnh mẫu thắng cuộc
             document.getElementById("shared-image").src = currentWinnerShirt.imageUrl;
             document.getElementById("form-shirt-heading").textContent = `Đăng Ký: ${currentWinnerShirt.name}`;
             document.getElementById("form-shirt-desc").textContent = `Mẫu áo chiến thắng được chọn làm áo đồng phục`;
           }
         } else {
-          // BÌNH CHỌN ĐANG MỞ
           activeBanner.classList.remove("hidden");
           winnerBanner.classList.add("hidden");
           formLockedNotice.classList.remove("hidden");
@@ -2117,7 +2525,6 @@
         }
       }
 
-      // Render các mẫu áo trong tab Bình Chọn
       function renderVotingCards() {
         const grid = document.getElementById("voting-cards-grid");
         const totalBadge = document.getElementById("vote-total-badge");
@@ -2148,7 +2555,6 @@
           voteStatusEl.textContent = "Vui lòng chọn tên của bạn ở Bước 1 trước khi bình chọn.";
         }
 
-        // Đếm phiếu cho từng mẫu
         const counts = {};
         currentConfig.shirts.forEach(s => { counts[s.id] = 0; });
         Object.values(votes).forEach(v => {
@@ -2180,7 +2586,6 @@
               </div>
               <h3 class="font-bold text-gray-900 text-sm mb-1">${escapeHtml(shirt.name)}</h3>
               
-              <!-- Progress bar số vote -->
               <div class="mt-2.5 mb-3">
                 <div class="flex justify-between text-xs font-semibold mb-1 text-gray-600">
                   <span>${count} phiếu</span>
@@ -2274,7 +2679,6 @@
         }
       };
 
-      // Đồng bộ Form đăng ký khi chọn tên học sinh
       function updateFormForUser(selectedName) {
         const userData = currentRegistrations[safeKey(selectedName)];
         const noShirtCheckbox = document.getElementById("no-shirt");
@@ -2390,7 +2794,6 @@
         const allNames = [...currentConfig.names];
         const shirtModelDisplay = currentWinnerShirt?.name || currentConfig.name || "Áo lớp";
 
-        // Thống kê size
         const sizeCounts = { S: 0, M: 0, L: 0, XL: 0, "2XL": 0, "3XL": 0, Khác: 0 };
         let totalOrdered = 0;
         let totalNoShirt = 0;
@@ -2412,7 +2815,6 @@
           }
         });
 
-        // Hiển thị chips thống kê
         if (chipsContainer) {
           chipsContainer.innerHTML = `
             <span class="font-bold text-gray-700 mr-2 flex items-center">📊 Thống kê:</span>
@@ -2428,7 +2830,6 @@
           `;
         }
 
-        // Lọc danh sách
         let filteredNames = allNames;
         if (currentFilter === "registered") {
           filteredNames = allNames.filter(name => {
@@ -2490,7 +2891,6 @@
         });
       }
 
-      // 1. Xuất Excel CHỈ CÁC CỘT LIÊN QUAN THÔNG TIN ÁO (Kèm bảng tổng hợp size)
       window.exportToExcelShirtOnly = function () {
         if (!currentConfig || !currentConfig.names || currentConfig.names.length === 0) {
           showToast("Không có dữ liệu để xuất.", true);
@@ -2499,7 +2899,6 @@
 
         const shirtModelName = currentWinnerShirt?.name || currentConfig.name || "Áo đồng phục";
 
-        // Mảng dữ liệu Excel
         const rows = [
           ["STT", "Họ và Tên", "Mẫu Áo", "Cỡ Áo (Size)", "Số Áo", "Tên In Áo", "Trạng Thái Đặt"]
         ];
@@ -2538,7 +2937,6 @@
           }
         });
 
-        // BẢNG TỔNG HỢP SỐ LƯỢNG THEO SIZE
         rows.push([]);
         rows.push(["--- BẢNG TỔNG HỢP SỐ LƯỢNG ÁO THEO SIZE ---"]);
         rows.push(["Mẫu áo chính thức:", shirtModelName]);
@@ -2555,13 +2953,13 @@
 
         const ws = XLSX.utils.aoa_to_sheet(rows);
         ws["!cols"] = [
-          { wch: 6 },  // STT
-          { wch: 26 }, // Họ và Tên
-          { wch: 28 }, // Mẫu Áo
-          { wch: 14 }, // Cỡ Áo
-          { wch: 10 }, // Số Áo
-          { wch: 18 }, // Tên In Áo
-          { wch: 16 }, // Trạng Thái Đặt
+          { wch: 6 },
+          { wch: 26 },
+          { wch: 28 },
+          { wch: 14 },
+          { wch: 10 },
+          { wch: 18 },
+          { wch: 16 },
         ];
 
         const wb = XLSX.utils.book_new();
@@ -2572,7 +2970,6 @@
         showToast("Đã xuất file Excel thông tin áo thành công!");
       };
 
-      // 2. Xuất Excel Gửi Xưởng In (Rút gọn)
       window.exportToExcelShop = function () {
         if (!currentConfig || !currentConfig.names) return;
 
@@ -2614,7 +3011,6 @@
         showToast("Đã xuất file gửi xưởng may!");
       };
 
-      // 3. Xuất toàn bộ danh sách
       window.exportToExcelFull = function () {
         const table = document.getElementById("excel-export-table");
         const ws = XLSX.utils.table_to_sheet(table);
@@ -2627,13 +3023,12 @@
       };
 
       // ==============================================================
-      // 9. KHỞI TẠO USER PANEL KHI MỞ LINK (?id=...)
+      // 9. KHỞI TẠO USER PANEL (ĐỒNG BỘ REALTIME KHI ADMIN SỬA)
       // ==============================================================
 
       async function initializeUserPanel(id) {
         currentId = id;
 
-        // 1. Tìm config từ bất kỳ user nào đã tạo link
         const allConfigsRef = ref(db, `/artifacts/${appId}/users`);
         const snap = await get(allConfigsRef);
         let foundConfig = null;
@@ -2661,21 +3056,45 @@
           return;
         }
 
-        // Cập nhật tiêu đề
-        document.getElementById("registration-title").textContent = currentConfig.name || "Đăng Ký Áo";
-        document.getElementById("registration-subtitle").textContent =
-          `Chiến dịch được tạo bởi ID: ${currentConfig.creatorId.substring(0, 8)}...`;
+        function refreshUserPanelUI() {
+          document.getElementById("registration-title").textContent = currentConfig.name || "Đăng Ký Áo";
+          document.getElementById("registration-subtitle").textContent =
+            `Chiến dịch được tạo bởi ID: ${currentConfig.creatorId.substring(0, 8)}...`;
 
-        // Load Select2 cho Form Đăng Ký
-        const selectName = $("#full-name");
-        selectName.empty();
-        selectName.append(new Option("--- Chọn Họ và Tên của bạn ---", "", true, true));
-        (currentConfig.names || []).forEach((name) => {
-          selectName.append(new Option(name, name));
-        });
-        selectName.select2({ placeholder: "Chọn tên của bạn từ danh sách", allowClear: true });
+          // Select2 Form đăng ký
+          const selectName = $("#full-name");
+          const curVal = selectName.val();
+          selectName.empty();
+          selectName.append(new Option("--- Chọn Họ và Tên của bạn ---", "", true, true));
+          (currentConfig.names || []).forEach((name) => {
+            selectName.append(new Option(name, name));
+          });
+          if (curVal && (currentConfig.names || []).includes(curVal)) {
+            selectName.val(curVal);
+          }
+          selectName.select2({ placeholder: "Chọn tên của bạn từ danh sách", allowClear: true });
 
-        selectName.on("change", function () {
+          // Select2 Tab bình chọn
+          const voteSelect = $("#vote-voter-name");
+          const curVoteVal = voteSelect.val();
+          voteSelect.empty();
+          voteSelect.append(new Option("--- Bấm vào đây để chọn tên bạn ---", "", true, true));
+          (currentConfig.names || []).forEach((name) => {
+            voteSelect.append(new Option(name, name));
+          });
+          if (curVoteVal && (currentConfig.names || []).includes(curVoteVal)) {
+            voteSelect.val(curVoteVal);
+          }
+          voteSelect.select2({ placeholder: "Chọn tên của bạn để bình chọn", allowClear: true });
+
+          applyVotingStateUI();
+          renderExportTable();
+        }
+
+        refreshUserPanelUI();
+
+        // Lắng nghe thay đổi chọn tên
+        $("#full-name").on("change", function () {
           const selectedName = $(this).val();
           if (selectedName) {
             updateFormForUser(selectedName);
@@ -2686,20 +3105,10 @@
           }
         });
 
-        // Load Select2 cho Tab Bình Chọn
-        const voteSelect = $("#vote-voter-name");
-        voteSelect.empty();
-        voteSelect.append(new Option("--- Bấm vào đây để chọn tên bạn ---", "", true, true));
-        (currentConfig.names || []).forEach((name) => {
-          voteSelect.append(new Option(name, name));
-        });
-        voteSelect.select2({ placeholder: "Chọn tên của bạn để bình chọn", allowClear: true });
-
-        voteSelect.on("change", function () {
+        $("#vote-voter-name").on("change", function () {
           renderVotingCards();
         });
 
-        // Lắng nghe submit form đăng ký
         document.getElementById("registration-form").onsubmit = handleRegistrationSubmit;
 
         // Lắng nghe dữ liệu đăng ký RTDB
@@ -2711,24 +3120,27 @@
           renderExportTable();
         });
 
-        // Nếu có bình chọn, lắng nghe dữ liệu voting RTDB
-        if (currentConfig.hasVoting) {
-          const vRef = ref(db, getVotingPath(id));
-          onValue(vRef, (snapshot) => {
-            currentVotingData = snapshot.val() || { votes: {}, status: "open" };
-            applyVotingStateUI();
-          });
+        // Lắng nghe dữ liệu bình chọn RTDB
+        const vRef = ref(db, getVotingPath(id));
+        onValue(vRef, (snapshot) => {
+          currentVotingData = snapshot.val() || { votes: {}, status: "open" };
+          applyVotingStateUI();
+        });
 
-          // Hiển thị nút admin đóng vote nếu user đang xem là creator
-          if (userId === currentConfig.creatorId) {
-            document.getElementById("admin-close-voting-btn-container")?.classList.remove("hidden");
-            document.getElementById("winner-admin-tools")?.classList.remove("hidden");
+        // LẮNG NGHE ĐỒNG BỘ REALTIME KHI ADMIN CHỈNH SỬA CHIẾN DỊCH (ẢNH, TÊN, HỌC SINH...)
+        const configLiveRef = ref(db, `/artifacts/${appId}/users/${currentConfig.creatorId}/link_configs/${id}`);
+        onValue(configLiveRef, (snap) => {
+          if (snap.exists()) {
+            currentConfig = snap.val();
+            refreshUserPanelUI();
           }
+        });
+
+        if (userId === currentConfig.creatorId) {
+          document.getElementById("admin-close-voting-btn-container")?.classList.remove("hidden");
+          document.getElementById("winner-admin-tools")?.classList.remove("hidden");
         }
 
-        applyVotingStateUI();
-
-        // Định tuyến tab mặc định
         const params = new URLSearchParams(window.location.search);
         const reqTab = params.get("tab");
         if (reqTab === "table") {
@@ -2750,12 +3162,10 @@
         const id = params.get("id");
 
         if (id) {
-          // Giao diện học sinh / người dùng
           document.getElementById("admin-dashboard").classList.add("hidden");
           document.getElementById("registration-panel").classList.remove("hidden");
           initializeUserPanel(id);
         } else {
-          // Giao diện Admin quản trị
           document.getElementById("registration-panel").classList.add("hidden");
           document.getElementById("admin-dashboard").classList.remove("hidden");
           switchAdminTab("manage");
