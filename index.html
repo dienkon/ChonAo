@@ -277,31 +277,65 @@
                     <!-- Dynamic shirt items -->
                   </div>
 
-                  <!-- Hạn đóng cổng bình chọn -->
-                  <div class="p-4 bg-amber-50/70 border border-amber-200 rounded-xl mt-4">
-                    <label for="voting-deadline" class="block text-sm font-bold text-amber-900 mb-1">
-                      ⏰ Thời Hạn Đóng Cổng Bình Chọn (Tùy chọn)
-                    </label>
-                    <p class="text-xs text-amber-700 mb-2.5">
-                      Khi hết thời gian này, cổng bình chọn sẽ tự động đóng và chốt mẫu có số vote cao nhất để học sinh nhập size.
-                    </p>
-                    <div class="flex flex-col sm:flex-row gap-2 items-start sm:items-center">
-                      <input
-                        type="datetime-local"
-                        id="voting-deadline"
-                        class="p-2 border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-amber-500"
-                      />
-                      <div class="flex gap-1.5 text-xs">
-                        <button type="button" onclick="setDeadlinePreset(1)" class="px-2.5 py-1.5 bg-white border rounded-lg hover:bg-gray-50 text-gray-700 font-medium">
-                          +1 ngày
-                        </button>
-                        <button type="button" onclick="setDeadlinePreset(3)" class="px-2.5 py-1.5 bg-white border rounded-lg hover:bg-gray-50 text-gray-700 font-medium">
-                          +3 ngày
-                        </button>
-                        <button type="button" onclick="setDeadlinePreset(7)" class="px-2.5 py-1.5 bg-white border rounded-lg hover:bg-gray-50 text-gray-700 font-medium">
-                          +1 tuần
-                        </button>
+                  <!-- Hạn đóng cổng bình chọn & Cài đặt mở sổ chi tiết -->
+                  <div class="p-4 bg-amber-50/70 border border-amber-200 rounded-xl mt-4 space-y-3">
+                    <div>
+                      <label for="voting-deadline" class="block text-sm font-bold text-amber-900 mb-1">
+                        ⏰ Thời Hạn Đóng Cổng Bình Chọn (Tùy chọn)
+                      </label>
+                      <p class="text-xs text-amber-700 mb-2">
+                        Khi hết thời gian này, cổng bình chọn sẽ tự động đóng và chốt mẫu có số vote cao nhất để học sinh nhập size.
+                      </p>
+                      <div class="flex flex-col sm:flex-row gap-2 items-start sm:items-center">
+                        <input
+                          type="datetime-local"
+                          id="voting-deadline"
+                          class="p-2 border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-amber-500"
+                        />
+                        <div class="flex gap-1.5 text-xs">
+                          <button type="button" onclick="setDeadlinePreset(1)" class="px-2.5 py-1.5 bg-white border rounded-lg hover:bg-gray-50 text-gray-700 font-medium">
+                            +1 ngày
+                          </button>
+                          <button type="button" onclick="setDeadlinePreset(3)" class="px-2.5 py-1.5 bg-white border rounded-lg hover:bg-gray-50 text-gray-700 font-medium">
+                            +3 ngày
+                          </button>
+                          <button type="button" onclick="setDeadlinePreset(7)" class="px-2.5 py-1.5 bg-white border rounded-lg hover:bg-gray-50 text-gray-700 font-medium">
+                            +1 tuần
+                          </button>
+                        </div>
                       </div>
+                    </div>
+
+                    <!-- TÙY CHỌN: ẨN / MỞ SỔ CHI TIẾT AI CHỌN MẪU NÀO -->
+                    <div class="pt-3 border-t border-amber-200/60 flex items-center justify-between">
+                      <div>
+                        <label for="create-show-vote-log" class="text-xs font-bold text-amber-900 cursor-pointer block">
+                          📖 Mở sổ xem chi tiết ai đã vote mẫu nào
+                        </label>
+                        <span class="text-[11px] text-amber-700">Cho phép học sinh bấm mở sổ để xem cụ thể bạn nào đã vote mẫu nào</span>
+                      </div>
+                      <input
+                        type="checkbox"
+                        id="create-show-vote-log"
+                        checked
+                        class="h-4 w-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500 cursor-pointer"
+                      />
+                    </div>
+
+                    <!-- TÙY CHỌN: CHO PHÉP HỌC SINH TỰ GỬI MẪU ÁO LÊN -->
+                    <div class="pt-3 border-t border-amber-200/60 flex items-center justify-between">
+                      <div>
+                        <label for="create-allow-user-upload" class="text-xs font-bold text-amber-900 cursor-pointer block">
+                          🎨 Cho phép học sinh tự gửi mẫu áo lên
+                        </label>
+                        <span class="text-[11px] text-amber-700">Học sinh có thể tải ảnh và đặt tên mẫu áo mới để cùng đưa vào bình chọn</span>
+                      </div>
+                      <input
+                        type="checkbox"
+                        id="create-allow-user-upload"
+                        checked
+                        class="h-4 w-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500 cursor-pointer"
+                      />
                     </div>
                   </div>
                 </div>
@@ -465,8 +499,17 @@
               <p id="winner-banner-desc" class="text-sm text-white/90 mt-1">
                 Cổng bình chọn đã kết thúc. Mẫu này có số phiếu cao nhất và được chọn để tiến hành may áo.
               </p>
-              <div class="mt-2 text-xs font-semibold bg-black/20 inline-block px-3 py-1 rounded-lg">
-                👉 Vui lòng nhập thông tin Size và Số Áo bên dưới để shop tiến hành in!
+              <div class="mt-2.5 flex flex-wrap items-center gap-2">
+                <span class="text-xs font-semibold bg-black/20 px-3 py-1.5 rounded-lg">
+                  👉 Vui lòng nhập thông tin Size và Số Áo bên dưới để shop tiến hành in!
+                </span>
+                <button
+                  type="button"
+                  onclick="openVoteLogInWinner()"
+                  class="bg-white/25 hover:bg-white/35 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition flex items-center gap-1"
+                >
+                  <span>📖</span> Xem Sổ Chi Tiết Ai Đã Vote Mẫu Nào
+                </button>
               </div>
             </div>
             <div id="winner-admin-tools" class="shrink-0 hidden">
@@ -520,8 +563,9 @@
 
         <!-- TAB 1: BÌNH CHỌN MẪU ÁO -->
         <div id="user-content-vote" class="hidden">
-          <div class="max-w-4xl mx-auto">
-            <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-custom mb-6">
+          <div class="max-w-4xl mx-auto space-y-6">
+            <!-- Bước 1: Chọn Tên -->
+            <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-custom">
               <h2 class="text-base font-bold text-gray-800 mb-2 flex items-center gap-2">
                 <span class="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs flex items-center justify-center font-bold">1</span>
                 Chọn Họ và Tên của bạn để bình chọn:
@@ -534,18 +578,121 @@
               </div>
             </div>
 
-            <div class="mb-4 flex justify-between items-center">
-              <h2 class="text-base font-bold text-gray-800 flex items-center gap-2">
-                <span class="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs flex items-center justify-center font-bold">2</span>
-                Bấm vào mẫu bạn yêu thích nhất:
-              </h2>
-              <span id="vote-total-badge" class="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded-full font-semibold">
-                Tổng số phiếu: 0
-              </span>
+            <!-- Khối đề xuất mẫu áo từ học sinh (Hiển thị khi Admin cho phép) -->
+            <div id="user-submit-shirt-prompt" class="hidden bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-pink-500/10 border border-amber-200/80 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="text-2xl">💡</span>
+                  <h3 class="font-extrabold text-sm sm:text-base text-gray-900">
+                    Bạn Có Mẫu Áo Muốn Đề Xuất?
+                  </h3>
+                  <span class="bg-amber-100 text-amber-800 text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-full border border-amber-200">
+                    Đang mở nhận mẫu
+                  </span>
+                </div>
+                <p class="text-xs text-gray-600 mt-1">
+                  Tự tải ảnh và đặt tên mẫu áo của bạn để cả lớp cùng xem và bình chọn!
+                </p>
+              </div>
+              <button
+                type="button"
+                onclick="openUserSubmitShirtModal()"
+                class="bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-md transition flex items-center gap-1.5 whitespace-nowrap cursor-pointer active:scale-95"
+              >
+                <span>🎨</span> Gửi Mẫu Áo Của Bạn
+              </button>
             </div>
 
-            <div id="voting-cards-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
-              <!-- Rendered by JS -->
+            <!-- Bước 2: Chọn Mẫu Áo -->
+            <div>
+              <div class="mb-4 flex justify-between items-center">
+                <h2 class="text-base font-bold text-gray-800 flex items-center gap-2">
+                  <span class="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs flex items-center justify-center font-bold">2</span>
+                  Bấm vào mẫu bạn yêu thích nhất:
+                </h2>
+                <span id="vote-total-badge" class="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded-full font-semibold">
+                  Tổng số phiếu: 0
+                </span>
+              </div>
+
+              <div id="voting-cards-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                <!-- Rendered by JS -->
+              </div>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- SỔ THEO DÕI CHI TIẾT BÌNH CHỌN (AI CHỌN MẪU NÀO)-->
+            <!-- ============================================== -->
+            <div id="vote-log-section" class="bg-white p-5 sm:p-6 rounded-2xl shadow-custom border border-gray-100">
+              <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-xl">📖</span>
+                    <h3 class="font-extrabold text-base sm:text-lg text-gray-900">
+                      Sổ Chi Tiết: Ai Đã Bình Chọn Mẫu Nào
+                    </h3>
+                    <span id="vote-log-ratio-badge" class="bg-indigo-50 text-indigo-700 text-xs px-2.5 py-0.5 rounded-full font-bold border border-indigo-100">
+                      Đã vote: 0 / 0
+                    </span>
+                  </div>
+                  <p class="text-xs text-gray-500 mt-1" id="vote-log-subtitle">
+                    Bấm nút bên cạnh để mở hoặc ẩn sổ danh sách cụ thể từng bạn chọn mẫu nào
+                  </p>
+                </div>
+
+                <div id="vote-log-toggle-container">
+                  <button
+                    type="button"
+                    id="toggle-vote-log-btn"
+                    onclick="toggleVoteLogVisibility()"
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center gap-1.5 shadow-md shadow-indigo-100 cursor-pointer"
+                  >
+                    <span id="toggle-vote-log-icon">👁️</span>
+                    <span id="toggle-vote-log-text">Mở Sổ Chi Tiết</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Nội dung Sổ Chi Tiết (Mặc định ẩn, bấm nút để mở) -->
+              <div id="vote-log-content" class="hidden mt-4 pt-4 border-t border-gray-100 space-y-3">
+                <!-- Bộ lọc mẫu áo -->
+                <div class="flex flex-wrap items-center gap-2" id="vote-log-filters">
+                  <!-- Dynamic filter chips -->
+                </div>
+
+                <!-- Ô tìm kiếm tên trong sổ -->
+                <div>
+                  <input
+                    type="text"
+                    id="vote-log-search"
+                    oninput="renderVoteLogTable()"
+                    placeholder="🔍 Tìm kiếm tên học sinh trong sổ..."
+                    class="w-full text-xs p-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-1 focus:ring-indigo-500"
+                  />
+                </div>
+
+                <!-- Bảng hiển thị ai chọn mẫu nào -->
+                <div class="table-container border rounded-xl overflow-hidden max-h-80">
+                  <table class="min-w-full divide-y divide-gray-200 text-xs text-left" id="vote-log-table">
+                    <thead class="bg-gray-50 sticky top-0 font-bold text-gray-600 uppercase">
+                      <tr>
+                        <th class="px-3 py-2.5 w-12 text-center">STT</th>
+                        <th class="px-3 py-2.5">Họ và Tên</th>
+                        <th class="px-3 py-2.5">Mẫu Áo Đã Bình Chọn</th>
+                        <th class="px-3 py-2.5">Thời Gian Vote</th>
+                      </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-100" id="vote-log-tbody">
+                      <!-- Rendered by JS -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Thông báo khi admin khóa xem sổ -->
+              <div id="vote-log-locked-notice" class="hidden mt-3 p-3 bg-gray-50 border border-gray-200 rounded-xl text-center text-xs text-gray-500 font-medium">
+                🔒 Admin đã bật chế độ ẩn danh (Chỉ Admin mới có quyền xem sổ chi tiết ai chọn mẫu nào).
+              </div>
             </div>
           </div>
         </div>
@@ -768,7 +915,6 @@
     <!-- ============================================== -->
     <div id="admin-edit-campaign-modal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-3 sm:p-5 hidden">
       <div class="bg-white rounded-3xl max-w-3xl w-full p-5 sm:p-7 shadow-2xl max-h-[92vh] flex flex-col">
-        <!-- Header modal -->
         <div class="flex justify-between items-start pb-4 border-b">
           <div>
             <div class="flex items-center gap-2">
@@ -778,7 +924,7 @@
               </h3>
             </div>
             <p class="text-xs text-gray-500 mt-1">
-              Chỉnh sửa linh hoạt: Đổi tên, thêm/đổi ảnh áo, đổi hạn chót bình chọn, sửa danh sách học sinh.
+              Chỉnh sửa linh hoạt: Đổi tên, thêm/đổi ảnh áo, đổi hạn chót bình chọn, ẩn/mở sổ xem ai vote, sửa danh sách học sinh.
             </p>
           </div>
           <button onclick="closeEditCampaignModal()" class="text-gray-400 hover:text-gray-600 text-2xl font-bold p-1">
@@ -786,7 +932,6 @@
           </button>
         </div>
 
-        <!-- Tab chuyển đổi trong Modal -->
         <div class="flex border-b border-gray-200 my-3 overflow-x-auto text-xs sm:text-sm">
           <button class="tab-button active" onclick="switchEditModalTab('config')" id="edit-tab-btn-config">
             <span>⚙️</span> Thông Tin & Ảnh Áo
@@ -796,11 +941,9 @@
           </button>
         </div>
 
-        <!-- Body modal (Cuộn được) -->
         <div class="overflow-y-auto flex-1 pr-1 space-y-5">
           <!-- TAB 1: THÔNG TIN VÀ ẢNH ÁO -->
           <div id="edit-modal-content-config" class="space-y-5">
-            <!-- 1. Tên chiến dịch -->
             <div>
               <label for="edit-modal-name" class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5">
                 Tên Chiến Dịch / Tên Link <span class="text-red-500">*</span>
@@ -813,7 +956,6 @@
               />
             </div>
 
-            <!-- 2. Chế độ chiến dịch -->
             <div class="p-3.5 bg-gray-50 rounded-xl border border-gray-200">
               <span class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2">
                 Chế độ chọn áo:
@@ -844,7 +986,7 @@
               </div>
             </div>
 
-            <!-- 3. Khu vực chế độ 1 mẫu áo (Đổi ảnh) -->
+            <!-- Khu vực chế độ 1 mẫu áo -->
             <div id="edit-modal-direct-section" class="p-4 bg-white border border-gray-200 rounded-2xl">
               <label class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2">
                 Ảnh Mẫu Áo Hiện Tại & Đổi Ảnh Mới
@@ -868,9 +1010,8 @@
               </div>
             </div>
 
-            <!-- 4. Khu vực chế độ bình chọn (Nhiều mẫu áo, Hạn chót, Trạng thái đóng/mở) -->
+            <!-- Khu vực chế độ bình chọn -->
             <div id="edit-modal-voting-section" class="space-y-4 hidden">
-              <!-- Hạn chót & trạng thái -->
               <div class="p-4 bg-amber-50/70 border border-amber-200 rounded-2xl space-y-3">
                 <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2">
                   <div>
@@ -903,6 +1044,37 @@
                     <button type="button" onclick="setEditDeadlinePreset(3)" class="px-2 py-1 bg-white border rounded-lg hover:bg-gray-50 text-gray-700 font-medium">+3 ngày</button>
                     <button type="button" onclick="setEditDeadlinePreset(7)" class="px-2 py-1 bg-white border rounded-lg hover:bg-gray-50 text-gray-700 font-medium">+1 tuần</button>
                   </div>
+                </div>
+
+                <!-- TÙY CHỌN: ẨN / MỞ SỔ CHI TIẾT AI CHỌN MẪU NÀO (TRONG MODAL SỬA) -->
+                <div class="pt-2 border-t border-amber-200/60 flex items-center justify-between">
+                  <div>
+                    <label for="edit-modal-show-vote-log" class="text-xs font-bold text-amber-900 cursor-pointer block">
+                      📖 Mở sổ xem chi tiết ai đã vote mẫu nào
+                    </label>
+                    <span class="text-[11px] text-amber-700">Bật/tắt quyền mở sổ xem chi tiết ai đã chọn mẫu nào</span>
+                  </div>
+                  <input
+                    type="checkbox"
+                    id="edit-modal-show-vote-log"
+                    checked
+                    class="h-4 w-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500 cursor-pointer"
+                  />
+                </div>
+
+                <!-- TÙY CHỌN: CHO PHÉP HỌC SINH TỰ GỬI MẪU ÁO LÊN (TRONG MODAL SỬA) -->
+                <div class="pt-2 border-t border-amber-200/60 flex items-center justify-between">
+                  <div>
+                    <label for="edit-modal-allow-user-upload" class="text-xs font-bold text-amber-900 cursor-pointer block">
+                      🎨 Cho phép học sinh tự gửi mẫu áo lên
+                    </label>
+                    <span class="text-[11px] text-amber-700">Bật/tắt quyền cho học sinh gửi thêm mẫu áo mới vào bình chọn</span>
+                  </div>
+                  <input
+                    type="checkbox"
+                    id="edit-modal-allow-user-upload"
+                    class="h-4 w-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500 cursor-pointer"
+                  />
                 </div>
               </div>
 
@@ -984,6 +1156,112 @@
       </div>
     </div>
 
+    <!-- ============================================== -->
+    <!-- MODAL: HỌC SINH TỰ GỬI MẪU ÁO LÊN (ĐỀ XUẤT)    -->
+    <!-- ============================================== -->
+    <div
+      id="user-submit-shirt-modal"
+      class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden"
+    >
+      <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between pb-4 border-b border-gray-100 mb-5">
+          <div class="flex items-center gap-2.5">
+            <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center text-lg shadow-md">
+              🎨
+            </div>
+            <div>
+              <h3 class="text-lg font-extrabold text-gray-900">Gửi Mẫu Áo Đề Xuất</h3>
+              <p class="text-xs text-gray-500">Mẫu áo này sẽ được đưa ngay vào bảng bình chọn của lớp</p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onclick="closeUserSubmitShirtModal()"
+            class="text-gray-400 hover:text-gray-600 w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center transition cursor-pointer text-lg"
+          >
+            ✕
+          </button>
+        </div>
+
+        <form id="user-submit-shirt-form" onsubmit="handleUserSubmitShirt(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5">
+              1. Bạn là ai? (Người đề xuất mẫu) <span class="text-red-500">*</span>
+            </label>
+            <select
+              id="user-submit-shirt-author"
+              class="w-full text-sm rounded-xl border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 p-2.5 border"
+              required
+            >
+              <option value="">--- Chọn Họ và Tên của bạn ---</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5">
+              2. Đặt tên cho mẫu áo <span class="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              id="user-submit-shirt-title"
+              placeholder="Ví dụ: Áo Hoodie Unisex Logo Rồng, Polo Trắng Phối Xanh..."
+              required
+              class="w-full text-sm rounded-xl border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 p-2.5 border"
+            />
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5">
+              3. Tải ảnh mẫu áo lên <span class="text-red-500">*</span>
+            </label>
+            <div class="mt-1 flex justify-center px-4 pt-4 pb-4 border-2 border-dashed border-gray-300 hover:border-indigo-500 rounded-2xl relative transition bg-gray-50/50">
+              <div class="space-y-2 text-center" id="user-submit-shirt-upload-prompt">
+                <span class="text-3xl">📸</span>
+                <div class="text-xs text-gray-600">
+                  <label for="user-submit-shirt-file" class="font-bold text-indigo-600 hover:text-indigo-500 cursor-pointer">
+                    Bấm vào đây để chọn ảnh áo
+                  </label>
+                  <p class="text-[11px] text-gray-400 mt-1">PNG, JPG, JPEG (ảnh rõ mặt trước/sau)</p>
+                </div>
+              </div>
+              <img
+                id="user-submit-shirt-preview"
+                src=""
+                alt="Preview"
+                class="hidden max-h-48 rounded-xl object-contain shadow-sm border border-gray-200"
+              />
+              <input
+                id="user-submit-shirt-file"
+                type="file"
+                accept="image/*"
+                required
+                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                onchange="handleUserSubmitShirtFileChange(event)"
+              />
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-gray-100 flex items-center justify-end gap-3">
+            <button
+              type="button"
+              onclick="closeUserSubmitShirtModal()"
+              class="px-4 py-2.5 rounded-xl border border-gray-200 text-xs font-bold text-gray-600 hover:bg-gray-50 transition cursor-pointer"
+            >
+              Hủy bỏ
+            </button>
+            <button
+              type="submit"
+              id="user-submit-shirt-btn"
+              class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-md transition flex items-center gap-2 cursor-pointer"
+            >
+              <span>🚀</span>
+              <span id="user-submit-shirt-btn-text">Gửi Mẫu Ngay</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <!-- MODAL LIGHTBOX PHÓNG TO ẢNH -->
     <div id="image-lightbox" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden" onclick="closeLightbox()">
       <div class="relative max-w-3xl max-h-[90vh]" onclick="event.stopPropagation()">
@@ -1052,13 +1330,17 @@
       let editingShirts = [];
       let editingVotingDeadline = "";
       let editingVotingStatus = "open";
+      let editingUserShirts = [];
 
-      // Trạng thái User
+      // Trạng thái User & Sổ bình chọn
       let currentRegistrations = {};
       let currentVotingData = { votes: {}, status: "open", winnerShirtId: null };
       let currentFilter = "all";
       let votingTimerInterval = null;
       let currentWinnerShirt = null;
+
+      let isVoteLogOpen = false;
+      let currentVoteLogFilter = "all"; // 'all', shirtId, 'unvoted'
 
       // --- TIỆN ÍCH CHUNG ---
 
@@ -1900,13 +2182,19 @@
 
         try {
           const uniqueId = crypto.randomUUID();
+          const allowUserUploadVal = document.getElementById("create-allow-user-upload")
+            ? document.getElementById("create-allow-user-upload").checked
+            : true;
+
           let config = {
             id: uniqueId,
             name: linkName,
             names: excelNames,
             timestamp: new Date().toISOString(),
             creatorId: userId,
-            hasVoting: campaignMode === "voting"
+            hasVoting: campaignMode === "voting",
+            showVoteLog: document.getElementById("create-show-vote-log") ? document.getElementById("create-show-vote-log").checked : true,
+            allowUserUpload: allowUserUploadVal
           };
 
           if (campaignMode === "direct") {
@@ -1942,7 +2230,9 @@
               status: "open",
               deadline: config.votingDeadline,
               winnerShirtId: null,
-              votes: {}
+              allowUserUpload: allowUserUploadVal,
+              votes: {},
+              user_shirts: {}
             });
           }
 
@@ -2027,7 +2317,6 @@
         editingVotingDeadline = editingConfig.votingDeadline || "";
         editingVotingStatus = editingConfig.votingStatus || "open";
 
-        // Điền vào Form
         document.getElementById("edit-modal-header-name").textContent = editingConfig.name;
         document.getElementById("edit-modal-name").value = editingConfig.name;
 
@@ -2044,13 +2333,35 @@
         document.getElementById("edit-modal-single-status").textContent = "Đang dùng ảnh hiện tại.";
         document.getElementById("edit-modal-single-file").value = "";
 
-        // Voting deadline
+        // Voting deadline & log toggle
         if (editingVotingDeadline) {
           const d = new Date(editingVotingDeadline);
           const pad = n => String(n).padStart(2, "0");
           document.getElementById("edit-modal-deadline").value = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
         } else {
           document.getElementById("edit-modal-deadline").value = "";
+        }
+
+        const showVoteLogCheck = document.getElementById("edit-modal-show-vote-log");
+        if (showVoteLogCheck) {
+          showVoteLogCheck.checked = editingConfig.showVoteLog !== false;
+        }
+
+        const allowUploadCheck = document.getElementById("edit-modal-allow-user-upload");
+        if (allowUploadCheck) {
+          allowUploadCheck.checked = editingConfig.allowUserUpload !== false;
+        }
+
+        editingUserShirts = [];
+        if (editingCampaignMode === "voting") {
+          try {
+            const vSnap = await get(ref(db, getVotingPath(configId)));
+            if (vSnap.exists() && vSnap.val().user_shirts) {
+              editingUserShirts = Object.values(vSnap.val().user_shirts);
+            }
+          } catch (e) {
+            console.error("Lỗi tải mẫu do học sinh gửi:", e);
+          }
         }
 
         updateEditModalVotingStatusBadge();
@@ -2066,6 +2377,7 @@
         editingConfigId = null;
         editingConfig = null;
         editingShirts = [];
+        editingUserShirts = [];
         editingNames = [];
         editingSingleImageFile = null;
       };
@@ -2174,7 +2486,51 @@
           `;
           container.appendChild(card);
         });
+
+        if (editingUserShirts && editingUserShirts.length > 0) {
+          const userSec = document.createElement("div");
+          userSec.className = "mt-4 pt-3 border-t border-amber-200";
+          userSec.innerHTML = `
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold text-amber-900 uppercase">
+                💡 Mẫu do học sinh tự đề xuất (${editingUserShirts.length} mẫu):
+              </span>
+            </div>
+            <div class="space-y-2">
+              ${editingUserShirts.map((s) => `
+                <div class="p-2.5 bg-amber-50/70 border border-amber-200 rounded-xl flex items-center justify-between gap-3 text-xs">
+                  <div class="flex items-center gap-2.5 overflow-hidden">
+                    <div class="w-12 h-12 bg-white rounded-lg overflow-hidden border shrink-0 cursor-pointer" onclick="openLightbox('${s.imageUrl}')">
+                      <img src="${s.imageUrl}" class="w-full h-full object-cover" />
+                    </div>
+                    <div class="truncate">
+                      <p class="font-bold text-gray-900 truncate">${escapeHtml(s.name)}</p>
+                      <p class="text-[11px] text-amber-700">Đề xuất bởi: <strong>${escapeHtml(s.submittedBy || "Học sinh")}</strong></p>
+                    </div>
+                  </div>
+                  <button type="button" onclick="removeEditModalUserShirt('${s.id}')" class="text-xs font-bold text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 px-2.5 py-1.5 rounded-lg border border-red-200 shrink-0 cursor-pointer transition">
+                    🗑️ Xóa mẫu
+                  </button>
+                </div>
+              `).join("")}
+            </div>
+          `;
+          container.appendChild(userSec);
+        }
       }
+
+      window.removeEditModalUserShirt = async function (shirtId) {
+        if (!confirm("Bạn có chắc chắn muốn xóa mẫu áo đề xuất này không? Các phiếu vote cho mẫu này sẽ bị hủy.")) return;
+        try {
+          await remove(ref(db, `${getVotingPath(editingConfigId)}/user_shirts/${shirtId}`));
+          editingUserShirts = editingUserShirts.filter(s => s.id !== shirtId);
+          renderEditModalShirts();
+          showToast("Đã xóa mẫu áo đề xuất của học sinh.");
+        } catch (e) {
+          console.error("Lỗi xóa mẫu áo:", e);
+          showToast("Lỗi khi xóa mẫu áo.", true);
+        }
+      };
 
       window.addEditModalShirtField = function () {
         const nextIdx = editingShirts.length + 1;
@@ -2212,7 +2568,6 @@
         }
       };
 
-      // Danh sách học sinh trong Modal
       function renderEditModalNames() {
         const container = document.getElementById("edit-modal-names-list");
         const badge = document.getElementById("edit-modal-names-badge");
@@ -2268,7 +2623,6 @@
         }
       };
 
-      // Lưu toàn bộ chỉnh sửa chiến dịch
       window.saveCampaignChanges = async function () {
         if (!editingConfigId) return;
 
@@ -2326,6 +2680,8 @@
 
           const deadlineVal = document.getElementById("edit-modal-deadline").value;
           const finalDeadline = deadlineVal ? new Date(deadlineVal).toISOString() : "";
+          const showLogVal = document.getElementById("edit-modal-show-vote-log") ? document.getElementById("edit-modal-show-vote-log").checked : true;
+          const allowUploadVal = document.getElementById("edit-modal-allow-user-upload") ? document.getElementById("edit-modal-allow-user-upload").checked : true;
 
           const updatedConfig = {
             ...editingConfig,
@@ -2333,6 +2689,8 @@
             names: editingNames,
             imageUrl: finalImageUrl,
             hasVoting: editingCampaignMode === "voting",
+            showVoteLog: showLogVal,
+            allowUserUpload: allowUploadVal,
             lastUpdated: new Date().toISOString()
           };
 
@@ -2348,7 +2706,8 @@
             await update(ref(db, getVotingPath(editingConfigId)), {
               deadline: finalDeadline,
               status: editingVotingStatus,
-              shirts: updatedConfig.shirts
+              shirts: updatedConfig.shirts,
+              allowUserUpload: allowUploadVal
             });
           }
 
@@ -2447,11 +2806,28 @@
         votingTimerInterval = setInterval(updateClock, 1000);
       }
 
+      function getCampaignShirts() {
+        const baseShirts = (currentConfig && currentConfig.shirts) ? [...currentConfig.shirts] : [];
+        const userShirtsObj = (currentVotingData && currentVotingData.user_shirts) || {};
+        const userShirts = Object.values(userShirtsObj);
+
+        const shirtMap = new Map();
+        baseShirts.forEach(s => shirtMap.set(s.id, { ...s, isUserSubmitted: false }));
+        userShirts.forEach(s => {
+          if (!shirtMap.has(s.id)) {
+            shirtMap.set(s.id, { ...s, isUserSubmitted: true });
+          }
+        });
+
+        return Array.from(shirtMap.values());
+      }
+
       function calculateWinningShirt() {
-        if (!currentConfig || !currentConfig.shirts || currentConfig.shirts.length === 0) return null;
+        const shirts = getCampaignShirts();
+        if (!shirts || shirts.length === 0) return null;
 
         const voteCounts = {};
-        currentConfig.shirts.forEach(s => { voteCounts[s.id] = 0; });
+        shirts.forEach(s => { voteCounts[s.id] = 0; });
 
         const votes = currentVotingData.votes || {};
         Object.values(votes).forEach(v => {
@@ -2461,9 +2837,9 @@
         });
 
         let maxVotes = -1;
-        let winner = currentConfig.shirts[0];
+        let winner = shirts[0];
 
-        currentConfig.shirts.forEach(s => {
+        shirts.forEach(s => {
           const count = voteCounts[s.id] || 0;
           if (count > maxVotes) {
             maxVotes = count;
@@ -2471,7 +2847,193 @@
           }
         });
 
-        return { ...winner, voteCount: maxVotes };
+        return { ...winner, voteCount: maxVotes > 0 ? maxVotes : 0 };
+      }
+
+      // ==============================================================
+      // SỔ THEO DÕI CHI TIẾT BÌNH CHỌN (ẨN / MỞ / LỌC / TÌM KIẾM)
+      // ==============================================================
+
+      window.toggleVoteLogVisibility = function () {
+        isVoteLogOpen = !isVoteLogOpen;
+        const content = document.getElementById("vote-log-content");
+        const btn = document.getElementById("toggle-vote-log-btn");
+        const icon = document.getElementById("toggle-vote-log-icon");
+        const text = document.getElementById("toggle-vote-log-text");
+
+        if (isVoteLogOpen) {
+          content.classList.remove("hidden");
+          btn.className = "bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center gap-1.5 border border-gray-300 cursor-pointer";
+          icon.textContent = "🙈";
+          text.textContent = "Ẩn Sổ Chi Tiết";
+          renderVoteLogTable();
+        } else {
+          content.classList.add("hidden");
+          btn.className = "bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center gap-1.5 shadow-md shadow-indigo-100 cursor-pointer";
+          icon.textContent = "👁️";
+          text.textContent = "Mở Sổ Chi Tiết";
+        }
+      };
+
+      window.filterVoteLog = function (key) {
+        currentVoteLogFilter = key;
+        renderVoteLogTable();
+      };
+
+      window.openVoteLogInWinner = function () {
+        switchUserTab("vote");
+        if (!isVoteLogOpen) {
+          toggleVoteLogVisibility();
+        }
+        document.getElementById("vote-log-section")?.scrollIntoView({ behavior: "smooth" });
+      };
+
+      function renderVoteLogTable() {
+        if (!currentConfig || !currentConfig.names) return;
+
+        const allNames = currentConfig.names || [];
+        const votes = currentVotingData.votes || {};
+        const shirts = getCampaignShirts();
+
+        // Kiểm tra quyền mở sổ
+        const isCreator = currentConfig && userId === currentConfig.creatorId;
+        const allowLog = currentConfig.showVoteLog !== false || isCreator;
+        const toggleContainer = document.getElementById("vote-log-toggle-container");
+        const lockedNotice = document.getElementById("vote-log-locked-notice");
+        const subtitle = document.getElementById("vote-log-subtitle");
+
+        if (!allowLog) {
+          toggleContainer?.classList.add("hidden");
+          document.getElementById("vote-log-content")?.classList.add("hidden");
+          lockedNotice?.classList.remove("hidden");
+          if (subtitle) subtitle.textContent = "Chế độ bình chọn ẩn danh đang được bật.";
+          return;
+        } else {
+          toggleContainer?.classList.remove("hidden");
+          lockedNotice?.classList.add("hidden");
+          if (subtitle) subtitle.textContent = "Bấm nút bên cạnh để mở hoặc ẩn sổ danh sách cụ thể từng bạn chọn mẫu nào";
+        }
+
+        // Đếm vote
+        const shirtCounts = {};
+        shirts.forEach(s => { shirtCounts[s.id] = 0; });
+        let votedCount = 0;
+
+        allNames.forEach(name => {
+          const v = votes[safeKey(name)];
+          if (v && v.shirtId) {
+            votedCount++;
+            if (shirtCounts[v.shirtId] !== undefined) shirtCounts[v.shirtId]++;
+          }
+        });
+
+        const unvotedCount = allNames.length - votedCount;
+
+        const ratioBadge = document.getElementById("vote-log-ratio-badge");
+        if (ratioBadge) {
+          ratioBadge.textContent = `Đã vote: ${votedCount} / ${allNames.length} học sinh`;
+        }
+
+        // Render Filter Chips
+        const filterContainer = document.getElementById("vote-log-filters");
+        if (filterContainer) {
+          let filterHtml = `
+            <span class="text-xs font-bold text-gray-500 mr-1">Lọc:</span>
+            <button type="button" onclick="filterVoteLog('all')" class="text-xs px-2.5 py-1 rounded-lg font-bold transition ${
+              currentVoteLogFilter === 'all' ? 'bg-indigo-600 text-white shadow-sm' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+            }">
+              Tất cả đã vote (${votedCount})
+            </button>
+          `;
+
+          shirts.forEach((shirt, idx) => {
+            const isSelected = currentVoteLogFilter === shirt.id;
+            const count = shirtCounts[shirt.id] || 0;
+            filterHtml += `
+              <button type="button" onclick="filterVoteLog('${shirt.id}')" class="text-xs px-2.5 py-1 rounded-lg font-bold transition flex items-center gap-1.5 ${
+                isSelected ? 'bg-indigo-600 text-white shadow-sm' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+              }">
+                <span class="w-3.5 h-3.5 rounded-full overflow-hidden shrink-0 inline-block bg-gray-300">
+                  <img src="${shirt.imageUrl}" class="w-full h-full object-cover" />
+                </span>
+                <span>${escapeHtml(shirt.name)} (${count})</span>
+              </button>
+            `;
+          });
+
+          filterHtml += `
+            <button type="button" onclick="filterVoteLog('unvoted')" class="text-xs px-2.5 py-1 rounded-lg font-bold transition ${
+              currentVoteLogFilter === 'unvoted' ? 'bg-red-600 text-white shadow-sm' : 'bg-red-50 hover:bg-red-100 text-red-600 border border-red-200'
+            }">
+              Chưa vote (${unvotedCount})
+            </button>
+          `;
+
+          filterContainer.innerHTML = filterHtml;
+        }
+
+        // Lọc và Render Bảng
+        const tbody = document.getElementById("vote-log-tbody");
+        if (!tbody) return;
+        tbody.innerHTML = "";
+
+        const searchKeyword = normalizeHeaderStr(document.getElementById("vote-log-search")?.value || "");
+
+        let displayList = [];
+
+        allNames.forEach((name, idx) => {
+          const v = votes[safeKey(name)];
+          const hasVoted = !!(v && v.shirtId);
+          const chosenShirt = hasVoted ? shirts.find(s => s.id === v.shirtId) : null;
+
+          if (currentVoteLogFilter === "all" && !hasVoted) return;
+          if (currentVoteLogFilter === "unvoted" && hasVoted) return;
+          if (currentVoteLogFilter !== "all" && currentVoteLogFilter !== "unvoted") {
+            if (!hasVoted || v.shirtId !== currentVoteLogFilter) return;
+          }
+
+          if (searchKeyword && !normalizeHeaderStr(name).includes(searchKeyword)) return;
+
+          displayList.push({
+            originalIdx: idx + 1,
+            name,
+            hasVoted,
+            chosenShirt,
+            timestamp: v?.timestamp || null
+          });
+        });
+
+        if (displayList.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="4" class="text-center py-6 text-gray-400 text-xs">Không có dữ liệu phù hợp với bộ lọc.</td></tr>`;
+          return;
+        }
+
+        displayList.forEach((item, index) => {
+          const tr = document.createElement("tr");
+          tr.className = index % 2 === 0 ? "bg-white" : "bg-gray-50/60";
+
+          let shirtHtml = "";
+          if (item.hasVoted && item.chosenShirt) {
+            shirtHtml = `
+              <div class="flex items-center gap-2">
+                <div class="w-7 h-7 rounded-lg overflow-hidden border bg-gray-100 shrink-0 cursor-pointer" onclick="openLightbox('${item.chosenShirt.imageUrl}')">
+                  <img src="${item.chosenShirt.imageUrl}" class="w-full h-full object-cover" />
+                </div>
+                <span class="font-bold text-gray-900">${escapeHtml(item.chosenShirt.name)}</span>
+              </div>
+            `;
+          } else {
+            shirtHtml = `<span class="bg-red-50 text-red-600 border border-red-200 text-[11px] px-2 py-0.5 rounded-full font-bold">Chưa bình chọn</span>`;
+          }
+
+          tr.innerHTML = `
+            <td class="px-3 py-2 text-center text-gray-400 font-mono">${index + 1}</td>
+            <td class="px-3 py-2 font-bold text-gray-800">${escapeHtml(item.name)}</td>
+            <td class="px-3 py-2">${shirtHtml}</td>
+            <td class="px-3 py-2 text-gray-400 whitespace-nowrap">${item.timestamp ? formatTimestamp(item.timestamp) : "-"}</td>
+          `;
+          tbody.appendChild(tr);
+        });
       }
 
       function applyVotingStateUI() {
@@ -2502,6 +3064,7 @@
           winnerBanner.classList.remove("hidden");
           formLockedNotice.classList.add("hidden");
           regCard.classList.remove("opacity-50", "pointer-events-none");
+          document.getElementById("user-submit-shirt-prompt")?.classList.add("hidden");
 
           currentWinnerShirt = calculateWinningShirt();
           if (currentWinnerShirt) {
@@ -2520,15 +3083,30 @@
           formLockedNotice.classList.remove("hidden");
           regCard.classList.add("opacity-50", "pointer-events-none");
 
+          const allowUpload = currentConfig.allowUserUpload !== false;
+          const promptEl = document.getElementById("user-submit-shirt-prompt");
+          if (promptEl) {
+            if (allowUpload) {
+              promptEl.classList.remove("hidden");
+            } else {
+              promptEl.classList.add("hidden");
+            }
+          }
+
           startVotingCountdown();
           renderVotingCards();
+        }
+
+        if (isVoteLogOpen) {
+          renderVoteLogTable();
         }
       }
 
       function renderVotingCards() {
         const grid = document.getElementById("voting-cards-grid");
         const totalBadge = document.getElementById("vote-total-badge");
-        if (!grid || !currentConfig || !currentConfig.shirts) return;
+        const shirts = getCampaignShirts();
+        if (!grid || !currentConfig || shirts.length === 0) return;
 
         grid.innerHTML = "";
         const votes = currentVotingData.votes || {};
@@ -2542,7 +3120,7 @@
         const voteStatusEl = document.getElementById("vote-voter-status");
         if (selectedVoter) {
           if (myVote) {
-            const votedShirt = currentConfig.shirts.find(s => s.id === myVote.shirtId);
+            const votedShirt = shirts.find(s => s.id === myVote.shirtId);
             voteStatusEl.innerHTML = `
               <span class="text-emerald-600 font-semibold">
                 ✓ Bạn đã bình chọn cho: <strong>${escapeHtml(votedShirt?.name || "Mẫu áo")}</strong>. Bạn có thể chọn mẫu khác để đổi phiếu.
@@ -2556,14 +3134,14 @@
         }
 
         const counts = {};
-        currentConfig.shirts.forEach(s => { counts[s.id] = 0; });
+        shirts.forEach(s => { counts[s.id] = 0; });
         Object.values(votes).forEach(v => {
           if (v && v.shirtId && counts[v.shirtId] !== undefined) {
             counts[v.shirtId]++;
           }
         });
 
-        currentConfig.shirts.forEach((shirt, idx) => {
+        shirts.forEach((shirt, idx) => {
           const count = counts[shirt.id] || 0;
           const percent = totalVotes > 0 ? Math.round((count / totalVotes) * 100) : 0;
           const isMyChoice = myVote && myVote.shirtId === shirt.id;
@@ -2584,9 +3162,23 @@
                   🔍 Phóng to
                 </span>
               </div>
-              <h3 class="font-bold text-gray-900 text-sm mb-1">${escapeHtml(shirt.name)}</h3>
+
+              <div class="flex items-start justify-between gap-1 mb-1">
+                <h3 class="font-bold text-gray-900 text-sm truncate flex-1" title="${escapeHtml(shirt.name)}">${escapeHtml(shirt.name)}</h3>
+                ${
+                  userId === currentConfig.creatorId
+                    ? `<button type="button" onclick="deleteUserSubmittedShirt('${shirt.id}')" title="Xóa mẫu này (Dành cho Admin)" class="text-xs text-red-500 hover:text-red-700 hover:bg-red-50 p-1 rounded transition shrink-0 cursor-pointer">🗑️</button>`
+                    : ""
+                }
+              </div>
+
+              ${
+                shirt.isUserSubmitted
+                  ? `<div class="mb-2.5"><span class="inline-flex items-center gap-1 bg-amber-50 text-amber-800 text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-amber-200/80">💡 Đề xuất bởi: ${escapeHtml(shirt.submittedBy || "Học sinh")}</span></div>`
+                  : `<div class="mb-2.5"><span class="inline-flex items-center gap-1 bg-indigo-50 text-indigo-700 text-[11px] font-semibold px-2 py-0.5 rounded-md">Mẫu từ Ban Tổ Chức</span></div>`
+              }
               
-              <div class="mt-2.5 mb-3">
+              <div class="mt-1 mb-3">
                 <div class="flex justify-between text-xs font-semibold mb-1 text-gray-600">
                   <span>${count} phiếu</span>
                   <span>${percent}%</span>
@@ -2600,7 +3192,7 @@
             <button
               type="button"
               onclick="submitVote('${shirt.id}')"
-              class="w-full py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 ${
+              class="w-full py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
                 isMyChoice
                   ? "bg-emerald-600 text-white hover:bg-emerald-700 shadow-md shadow-emerald-100"
                   : "bg-indigo-600 text-white hover:bg-indigo-700 shadow-md shadow-indigo-100"
@@ -2612,6 +3204,154 @@
           grid.appendChild(card);
         });
       }
+
+      window.openUserSubmitShirtModal = function () {
+        if (!currentConfig) return;
+        if (isVotingClosed()) {
+          showToast("Cổng bình chọn đã đóng, không thể gửi thêm mẫu mới.", true);
+          return;
+        }
+        if (currentConfig.allowUserUpload === false) {
+          showToast("Admin đã tắt tính năng tự gửi mẫu áo cho chiến dịch này.", true);
+          return;
+        }
+
+        const selectAuthor = document.getElementById("user-submit-shirt-author");
+        if (selectAuthor) {
+          selectAuthor.innerHTML = '<option value="">--- Chọn Họ và Tên của bạn ---</option>';
+          (currentConfig.names || []).forEach(name => {
+            const opt = document.createElement("option");
+            opt.value = name;
+            opt.textContent = name;
+            selectAuthor.appendChild(opt);
+          });
+          const curVoter = $("#vote-voter-name").val();
+          if (curVoter) {
+            selectAuthor.value = curVoter;
+          }
+        }
+
+        document.getElementById("user-submit-shirt-title").value = "";
+        document.getElementById("user-submit-shirt-file").value = "";
+        const previewEl = document.getElementById("user-submit-shirt-preview");
+        if (previewEl) {
+          previewEl.src = "";
+          previewEl.classList.add("hidden");
+        }
+        document.getElementById("user-submit-shirt-upload-prompt")?.classList.remove("hidden");
+        const btn = document.getElementById("user-submit-shirt-btn");
+        if (btn) btn.disabled = false;
+        const btnText = document.getElementById("user-submit-shirt-btn-text");
+        if (btnText) btnText.textContent = "Gửi Mẫu Ngay";
+
+        document.getElementById("user-submit-shirt-modal").classList.remove("hidden");
+      };
+
+      window.closeUserSubmitShirtModal = function () {
+        document.getElementById("user-submit-shirt-modal").classList.add("hidden");
+      };
+
+      window.handleUserSubmitShirtFileChange = function (event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        if (!file.type.startsWith("image/")) {
+          showToast("Vui lòng chọn file hình ảnh (PNG, JPG, JPEG).", true);
+          event.target.value = "";
+          return;
+        }
+        const previewEl = document.getElementById("user-submit-shirt-preview");
+        const promptEl = document.getElementById("user-submit-shirt-upload-prompt");
+        previewEl.src = URL.createObjectURL(file);
+        previewEl.classList.remove("hidden");
+        promptEl.classList.add("hidden");
+      };
+
+      window.handleUserSubmitShirt = async function (e) {
+        e.preventDefault();
+        if (isVotingClosed()) {
+          showToast("Cổng bình chọn đã đóng.", true);
+          return;
+        }
+        if (currentConfig.allowUserUpload === false) {
+          showToast("Tính năng tự gửi mẫu đang bị tắt.", true);
+          return;
+        }
+
+        const author = document.getElementById("user-submit-shirt-author").value.trim();
+        const title = document.getElementById("user-submit-shirt-title").value.trim();
+        const file = document.getElementById("user-submit-shirt-file").files[0];
+
+        if (!author) {
+          showToast("Vui lòng chọn tên của bạn (người đề xuất).", true);
+          return;
+        }
+        if (!title) {
+          showToast("Vui lòng nhập tên mẫu áo.", true);
+          return;
+        }
+        if (!file) {
+          showToast("Vui lòng chọn ảnh mẫu áo để tải lên.", true);
+          return;
+        }
+
+        const btn = document.getElementById("user-submit-shirt-btn");
+        const btnText = document.getElementById("user-submit-shirt-btn-text");
+        btn.disabled = true;
+        btnText.textContent = "Đang tải ảnh lên Cloudinary...";
+
+        try {
+          const imageUrl = await uploadImage(file);
+          if (!imageUrl) throw new Error("Không thể tải ảnh áo lên.");
+
+          btnText.textContent = "Đang lưu mẫu áo...";
+          const newShirtId = `shirt_user_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
+          const newShirt = {
+            id: newShirtId,
+            name: title,
+            imageUrl: imageUrl,
+            submittedBy: author,
+            submittedAt: new Date().toISOString(),
+            isUserSubmitted: true
+          };
+
+          await set(ref(db, `${getVotingPath(currentId)}/user_shirts/${newShirtId}`), newShirt);
+
+          const voterSelect = $("#vote-voter-name");
+          if (!voterSelect.val()) {
+            voterSelect.val(author).trigger("change");
+          }
+
+          if (typeof confetti === "function") {
+            confetti({ particleCount: 50, spread: 60, origin: { y: 0.6 } });
+          }
+
+          showToast(`Đã gửi mẫu áo "${title}" thành công! Mẫu đã được thêm vào bảng bình chọn.`);
+          closeUserSubmitShirtModal();
+        } catch (error) {
+          console.error("Lỗi khi gửi mẫu áo:", error);
+          showToast("Có lỗi xảy ra khi gửi mẫu áo. Vui lòng thử lại.", true);
+          btn.disabled = false;
+          btnText.textContent = "Gửi Mẫu Ngay";
+        }
+      };
+
+      window.deleteUserSubmittedShirt = async function (shirtId) {
+        if (!confirm("Bạn có chắc chắn muốn xóa mẫu áo này không? Các phiếu vote cho mẫu này sẽ bị hủy.")) return;
+        try {
+          await remove(ref(db, `${getVotingPath(currentId)}/user_shirts/${shirtId}`));
+          if (userId === currentConfig.creatorId && currentConfig.shirts && currentConfig.shirts.some(s => s.id === shirtId)) {
+            const updatedShirts = currentConfig.shirts.filter(s => s.id !== shirtId);
+            currentConfig.shirts = updatedShirts;
+            await update(ref(db, `/artifacts/${appId}/users/${userId}/link_configs/${currentId}`), {
+              shirts: updatedShirts
+            });
+          }
+          showToast("Đã xóa mẫu áo thành công.");
+        } catch (err) {
+          console.error("Lỗi khi xóa mẫu:", err);
+          showToast("Lỗi khi xóa mẫu áo.", true);
+        }
+      };
 
       window.submitVote = async function (shirtId) {
         if (isVotingClosed()) {
@@ -3093,7 +3833,6 @@
 
         refreshUserPanelUI();
 
-        // Lắng nghe thay đổi chọn tên
         $("#full-name").on("change", function () {
           const selectedName = $(this).val();
           if (selectedName) {
@@ -3107,11 +3846,13 @@
 
         $("#vote-voter-name").on("change", function () {
           renderVotingCards();
+          if (isVoteLogOpen) {
+            renderVoteLogTable();
+          }
         });
 
         document.getElementById("registration-form").onsubmit = handleRegistrationSubmit;
 
-        // Lắng nghe dữ liệu đăng ký RTDB
         const regsRef = ref(db, getRegistrationPath(id));
         onValue(regsRef, (snapshot) => {
           currentRegistrations = snapshot.val() || {};
@@ -3120,14 +3861,15 @@
           renderExportTable();
         });
 
-        // Lắng nghe dữ liệu bình chọn RTDB
         const vRef = ref(db, getVotingPath(id));
         onValue(vRef, (snapshot) => {
           currentVotingData = snapshot.val() || { votes: {}, status: "open" };
           applyVotingStateUI();
+          if (isVoteLogOpen) {
+            renderVoteLogTable();
+          }
         });
 
-        // LẮNG NGHE ĐỒNG BỘ REALTIME KHI ADMIN CHỈNH SỬA CHIẾN DỊCH (ẢNH, TÊN, HỌC SINH...)
         const configLiveRef = ref(db, `/artifacts/${appId}/users/${currentConfig.creatorId}/link_configs/${id}`);
         onValue(configLiveRef, (snap) => {
           if (snap.exists()) {
