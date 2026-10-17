@@ -896,7 +896,7 @@
                 <button
                   onclick="exportToExcelShop()"
                   class="bg-emerald-600 hover:bg-emerald-700 text-white py-2 px-3 rounded-xl font-bold transition text-xs sm:text-sm flex items-center gap-1.5 shadow-md shadow-emerald-100"
-                  title="Chỉ xuất STT, Số áo, Tên in áo, Cỡ áo gửi xưởng may"
+                  title="Chỉ xuất STT, Cỡ áo, Số áo, Tên in (không có cột họ tên) gửi xưởng in"
                 >
                   <span>🏷️</span> Gửi Xưởng In
                 </button>
@@ -3961,7 +3961,7 @@
 
         const shirtModelName = currentWinnerShirt?.name || currentConfig.name || "Áo đồng phục";
         const rows = [
-          ["STT", "Họ và Tên", "Cỡ Áo", "Số In Sau Lưng", "Tên In Sau Lưng", "Mẫu Áo"]
+          ["STT", "Cỡ Áo (Size)", "Số In Sau Lưng", "Tên In Sau Lưng", "Mẫu Áo"]
         ];
 
         let stt = 1;
@@ -3972,7 +3972,6 @@
             const displayShirtNumber = rawShirtNumber !== "" ? rawShirtNumber : "-";
             rows.push([
               stt++,
-              name,
               reg.shirtSize || "-",
               { t: "s", v: displayShirtNumber, z: "@" },
               reg.shirtName || "-",
@@ -3984,11 +3983,10 @@
         const ws = XLSX.utils.aoa_to_sheet(rows);
         ws["!cols"] = [
           { wch: 6 },
-          { wch: 25 },
-          { wch: 12 },
-          { wch: 16 },
+          { wch: 15 },
           { wch: 18 },
-          { wch: 25 },
+          { wch: 20 },
+          { wch: 26 },
         ];
 
         const wb = XLSX.utils.book_new();
