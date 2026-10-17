@@ -38,7 +38,22 @@
       }
       .table-container {
         max-height: 520px;
+        overflow-x: auto;
         overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-x pan-y;
+        overscroll-behavior: contain;
+      }
+      .table-container::-webkit-scrollbar {
+        height: 6px;
+        width: 6px;
+      }
+      .table-container::-webkit-scrollbar-thumb {
+        background-color: #cbd5e1;
+        border-radius: 9999px;
+      }
+      .table-container::-webkit-scrollbar-track {
+        background: #f8fafc;
       }
       .shadow-custom {
         box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
@@ -161,9 +176,12 @@
                 <span>+</span> Tạo Link Mới
               </button>
             </div>
-            <div class="table-container border rounded-xl overflow-hidden">
-              <table class="min-w-full divide-y divide-gray-200 text-left text-sm" id="link-management-table">
-                <thead class="bg-gray-50 sticky top-0 text-xs font-semibold text-gray-600 uppercase tracking-wider">
+            <div class="text-[11px] text-gray-400 sm:hidden flex items-center gap-1 mb-1.5 font-medium">
+              <span>👉 Vuốt ngang bảng để xem đầy đủ cột và nút thao tác</span>
+            </div>
+            <div class="table-container border border-gray-200 rounded-xl overflow-x-auto overflow-y-auto">
+              <table class="w-full min-w-[680px] divide-y divide-gray-200 text-left text-sm" id="link-management-table">
+                <thead class="bg-gray-50 sticky top-0 z-10 text-xs font-semibold text-gray-600 uppercase tracking-wider">
                   <tr>
                     <th class="px-4 py-3">Tên Chiến Dịch</th>
                     <th class="px-4 py-3">Chế Độ / Trạng Thái</th>
@@ -403,7 +421,7 @@
                   </div>
 
                   <!-- Danh sách tên có thể sửa từng line -->
-                  <div id="names-list-container" class="max-h-56 overflow-y-auto space-y-1 pr-1 divide-y divide-gray-100">
+                  <div id="names-list-container" class="max-h-56 overflow-y-auto space-y-1 pr-1 divide-y divide-gray-100 touch-pan-y" style="-webkit-overflow-scrolling: touch;">
                     <!-- Dynamic student rows -->
                   </div>
                 </div>
@@ -656,7 +674,7 @@
               <!-- Nội dung Sổ Chi Tiết (Mặc định ẩn, bấm nút để mở) -->
               <div id="vote-log-content" class="hidden mt-4 pt-4 border-t border-gray-100 space-y-3">
                 <!-- Bộ lọc mẫu áo -->
-                <div class="flex flex-wrap items-center gap-2" id="vote-log-filters">
+                <div class="flex flex-wrap items-center gap-2 overflow-x-auto pb-1 max-w-full touch-pan-x" id="vote-log-filters">
                   <!-- Dynamic filter chips -->
                 </div>
 
@@ -672,9 +690,12 @@
                 </div>
 
                 <!-- Bảng hiển thị ai chọn mẫu nào -->
-                <div class="table-container border rounded-xl overflow-hidden max-h-80">
-                  <table class="min-w-full divide-y divide-gray-200 text-xs text-left" id="vote-log-table">
-                    <thead class="bg-gray-50 sticky top-0 font-bold text-gray-600 uppercase">
+                <div class="flex items-center justify-between text-[11px] text-gray-400 sm:hidden">
+                  <span>👉 Vuốt ngang bảng để xem mẫu áo & thời gian</span>
+                </div>
+                <div class="table-container border border-gray-200 rounded-xl overflow-x-auto overflow-y-auto max-h-96">
+                  <table class="w-full min-w-[550px] divide-y divide-gray-200 text-xs text-left" id="vote-log-table">
+                    <thead class="bg-gray-50 sticky top-0 z-10 font-bold text-gray-600 uppercase">
                       <tr>
                         <th class="px-3 py-2.5 w-12 text-center">STT</th>
                         <th class="px-3 py-2.5">Họ và Tên</th>
@@ -782,16 +803,21 @@
 
                   <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label for="shirt-number" class="block text-sm font-semibold text-gray-700 mb-1">
-                        Số In Sau Lưng
-                      </label>
+                      <div class="flex justify-between items-center mb-1">
+                        <label for="shirt-number" class="block text-sm font-semibold text-gray-700">
+                          Số In Sau Lưng
+                        </label>
+                        <span id="shirt-number-badge" class="text-[11px] font-bold hidden"></span>
+                      </div>
                       <input
                         type="text"
                         inputmode="numeric"
                         id="shirt-number"
-                        class="w-full p-2.5 border border-gray-300 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                        class="w-full p-2.5 border border-gray-300 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 text-sm transition"
                         placeholder="Ví dụ: 10, 07..."
+                        oninput="validateShirtNumberImmediate()"
                       />
+                      <div id="shirt-number-error" class="hidden mt-1.5 text-xs font-semibold"></div>
                     </div>
 
                     <div>
@@ -826,7 +852,7 @@
         <div id="user-content-table" class="hidden">
           <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-custom mb-6">
             <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-4">
-              <div class="flex flex-wrap items-center gap-2">
+              <div class="flex flex-wrap items-center gap-2 overflow-x-auto pb-1 max-w-full touch-pan-x">
                 <span class="text-xs font-bold text-gray-600 uppercase tracking-wide mr-1">Lọc:</span>
                 <button
                   onclick="filterTable('all')"
@@ -859,7 +885,7 @@
               </div>
 
               <!-- CÁC NÚT XUẤT EXCEL CHUYÊN DỤNG (CHỈ CỘT LIÊN QUAN ÁO) -->
-              <div class="flex flex-wrap items-center gap-2 w-full lg:w-auto">
+              <div class="flex flex-wrap items-center gap-2 w-full lg:w-auto overflow-x-auto pb-1 touch-pan-x">
                 <button
                   onclick="exportToExcelShirtOnly()"
                   class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-3.5 rounded-xl font-bold transition text-xs sm:text-sm flex items-center gap-1.5 shadow-md shadow-indigo-100"
@@ -885,13 +911,16 @@
             </div>
 
             <!-- Bảng thống kê nhanh số lượng theo size -->
-            <div id="size-summary-chips" class="flex flex-wrap gap-2 mb-4 p-3 bg-gray-50 rounded-xl border border-gray-200 text-xs">
+            <div id="size-summary-chips" class="flex flex-wrap gap-2 mb-4 p-3 bg-gray-50 rounded-xl border border-gray-200 text-xs overflow-x-auto touch-pan-x">
               <!-- Rendered by JS -->
             </div>
 
-            <div class="table-container border rounded-xl overflow-hidden">
-              <table class="min-w-full divide-y divide-gray-200 text-sm" id="excel-export-table">
-                <thead class="bg-gray-50 sticky top-0 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+            <div class="flex items-center justify-between text-[11px] text-gray-400 sm:hidden mb-1.5 font-medium">
+              <span>👉 Vuốt ngang bảng để xem đầy đủ Cỡ áo, Số áo, Tên in</span>
+            </div>
+            <div class="table-container border border-gray-200 rounded-xl overflow-x-auto overflow-y-auto max-h-[560px]">
+              <table class="w-full min-w-[760px] divide-y divide-gray-200 text-sm" id="excel-export-table">
+                <thead class="bg-gray-50 sticky top-0 z-10 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                   <tr>
                     <th class="px-3 py-3 text-left w-12">STT</th>
                     <th class="px-3 py-3 text-left">Họ và Tên</th>
@@ -1127,7 +1156,7 @@
               </div>
             </div>
 
-            <div class="border rounded-2xl divide-y divide-gray-100 max-h-72 overflow-y-auto p-2 bg-gray-50" id="edit-modal-names-list">
+            <div class="border rounded-2xl divide-y divide-gray-100 max-h-72 overflow-y-auto p-2 bg-gray-50 touch-pan-y" style="-webkit-overflow-scrolling: touch;" id="edit-modal-names-list">
               <!-- Rendered dynamically -->
             </div>
           </div>
@@ -2759,6 +2788,9 @@
           shirtFields.classList.remove("hidden");
           submitBtn.querySelector("span").textContent = "Lưu Thông Tin Đăng Ký";
         }
+        if (typeof window.validateShirtNumberImmediate === "function") {
+          window.validateShirtNumberImmediate();
+        }
       };
 
       function isVotingClosed() {
@@ -3441,6 +3473,109 @@
         }
       };
 
+      window.findUserWithShirtNumber = function (inputNumber, currentStudentName) {
+        if (!inputNumber || !inputNumber.toString().trim()) return null;
+        const cleanNum = inputNumber.toString().trim().toLowerCase();
+        const numVal = !isNaN(cleanNum) && cleanNum !== "" ? parseInt(cleanNum, 10) : null;
+
+        for (const [key, reg] of Object.entries(currentRegistrations || {})) {
+          if (!reg || reg.noShirt || !reg.shirtNumber) continue;
+          if (reg.fullName && currentStudentName && reg.fullName.trim() === currentStudentName.trim()) continue;
+
+          const regNum = String(reg.shirtNumber).trim().toLowerCase();
+          const regNumVal = !isNaN(regNum) && regNum !== "" ? parseInt(regNum, 10) : null;
+
+          const isDirectMatch = regNum === cleanNum;
+          const isNumericMatch = numVal !== null && regNumVal !== null && numVal === regNumVal;
+
+          if (isDirectMatch || isNumericMatch) {
+            return {
+              ownerName: reg.fullName || "Một bạn trong lớp",
+              ownerNumber: reg.shirtNumber
+            };
+          }
+        }
+        return null;
+      };
+
+      window.validateShirtNumberImmediate = function () {
+        const inputEl = document.getElementById("shirt-number");
+        const badgeEl = document.getElementById("shirt-number-badge");
+        const errorEl = document.getElementById("shirt-number-error");
+        const submitBtn = document.getElementById("submit-reg-btn");
+        const noShirtCheckbox = document.getElementById("no-shirt");
+        const selectedName = $("#full-name").val();
+
+        if (!inputEl || !badgeEl || !errorEl || !submitBtn) return true;
+
+        const resetStyles = () => {
+          inputEl.classList.remove(
+            "border-red-500", "bg-red-50", "focus:ring-red-500", "focus:border-red-500", "text-red-900",
+            "border-emerald-500", "bg-emerald-50/40"
+          );
+          inputEl.classList.add("border-gray-300");
+        };
+
+        if (noShirtCheckbox && noShirtCheckbox.checked) {
+          badgeEl.classList.add("hidden");
+          badgeEl.textContent = "";
+          errorEl.classList.add("hidden");
+          errorEl.innerHTML = "";
+          resetStyles();
+          submitBtn.disabled = false;
+          return true;
+        }
+
+        const val = inputEl.value.trim();
+
+        if (!val) {
+          badgeEl.classList.add("hidden");
+          badgeEl.textContent = "";
+          errorEl.classList.add("hidden");
+          errorEl.innerHTML = "";
+          resetStyles();
+          submitBtn.disabled = false;
+          return true;
+        }
+
+        const conflict = window.findUserWithShirtNumber(val, selectedName);
+
+        if (conflict) {
+          resetStyles();
+          inputEl.classList.remove("border-gray-300");
+          inputEl.classList.add("border-red-500", "bg-red-50", "focus:ring-red-500", "focus:border-red-500", "text-red-900");
+
+          badgeEl.className = "text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-red-100 text-red-700 border border-red-200 animate-pulse";
+          badgeEl.textContent = `❌ Đã trùng (${conflict.ownerName})`;
+          badgeEl.classList.remove("hidden");
+
+          const isNumDifferent = String(conflict.ownerNumber).trim() !== val;
+          const detailNumText = isNumDifferent ? ` (số "${escapeHtml(String(conflict.ownerNumber))}")` : "";
+
+          errorEl.className = "mt-2 p-2.5 rounded-xl bg-red-50 border border-red-200 text-xs font-semibold text-red-700 flex items-start gap-2 shadow-sm animate-fadeIn";
+          errorEl.innerHTML = `<span class="text-sm leading-none mt-0.5">⚠️</span> <span>Số áo <strong>"${escapeHtml(val)}"</strong> đã được bạn <strong>${escapeHtml(conflict.ownerName)}</strong> đăng ký${detailNumText}! Vui lòng chọn số áo khác để không bị trùng lặp.</span>`;
+          errorEl.classList.remove("hidden");
+
+          submitBtn.disabled = true;
+          return false;
+        } else {
+          resetStyles();
+          inputEl.classList.remove("border-gray-300");
+          inputEl.classList.add("border-emerald-500", "bg-emerald-50/40");
+
+          badgeEl.className = "text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200";
+          badgeEl.textContent = "✓ Số áo hợp lệ";
+          badgeEl.classList.remove("hidden");
+
+          errorEl.className = "mt-1.5 text-xs font-semibold text-emerald-600 flex items-center gap-1.5";
+          errorEl.innerHTML = `<span class="text-sm">✓</span> <span>Số áo <strong>"${escapeHtml(val)}"</strong> chưa có ai đăng ký, bạn có thể chọn số này.</span>`;
+          errorEl.classList.remove("hidden");
+
+          submitBtn.disabled = false;
+          return true;
+        }
+      };
+
       function updateFormForUser(selectedName) {
         const userData = currentRegistrations[safeKey(selectedName)];
         const noShirtCheckbox = document.getElementById("no-shirt");
@@ -3464,6 +3599,7 @@
         }
 
         toggleShirtFields(noShirtCheckbox.checked);
+        window.validateShirtNumberImmediate();
         $("#full-name").val(selectedName).trigger("change.select2");
       }
 
@@ -3497,6 +3633,17 @@
           registrationData.shirtNumber = document.getElementById("shirt-number").value.trim();
           registrationData.shirtName = document.getElementById("shirt-name").value.trim();
           registrationData.shirtSize = document.getElementById("shirt-size").value;
+
+          if (registrationData.shirtNumber) {
+            const conflict = window.findUserWithShirtNumber(registrationData.shirtNumber, selectedName);
+            if (conflict) {
+              window.validateShirtNumberImmediate();
+              showToast(`Số áo "${registrationData.shirtNumber}" đã được bạn ${conflict.ownerName} đăng ký! Vui lòng chọn số khác.`, true);
+              submitBtn.disabled = true;
+              loader.style.display = "none";
+              return;
+            }
+          }
 
           if (!registrationData.shirtSize) {
             showToast("Vui lòng chọn Cỡ Áo (Size).", true);
@@ -3869,6 +4016,9 @@
             document.getElementById("registration-form").reset();
             toggleShirtFields(false);
             document.getElementById("user-status-message").textContent = "";
+            if (typeof window.validateShirtNumberImmediate === "function") {
+              window.validateShirtNumberImmediate();
+            }
           }
         });
 
