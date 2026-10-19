@@ -727,7 +727,7 @@
                 <div>
                   <strong class="font-bold text-xs sm:text-sm text-indigo-950 block">Đang Bình Chọn Mẫu Áo & Đăng Ký Song Song</strong>
                   <p class="text-[11px] sm:text-xs text-indigo-700 mt-0.5">
-                    Bạn có thể điền trước Cỡ áo (Size), Số áo và Tên in lưng ngay tại đây! Mẫu áo chính thức sẽ tự động chốt theo kết quả bình chọn.
+                    Bạn có thể điền trước Cỡ áo, Số áo và Tên in lưng ngay tại đây! Mẫu áo chính thức sẽ tự động chốt theo kết quả bình chọn.
                   </p>
                 </div>
               </div>
@@ -785,22 +785,22 @@
                 <div id="shirt-fields" class="space-y-4 border-t pt-4">
                   <div class="mb-4">
                     <label for="shirt-size" class="block text-sm font-semibold text-gray-700 mb-1">
-                      Cỡ Áo (Size) <span class="text-red-500">*</span>
+                      Cỡ Áo <span class="text-red-500">*</span>
                     </label>
                     <select
                       id="shirt-size"
                       class="w-full p-2.5 border border-gray-300 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 text-sm"
                     >
                       <option value="">-- Chọn size áo của bạn --</option>
-                      <option value="S">Size S (Dưới 48kg)</option>
-                      <option value="M">Size M (48 - 56kg)</option>
-                      <option value="L">Size L (57 - 65kg)</option>
-                      <option value="XL">Size XL (66 - 74kg)</option>
-                      <option value="2XL">Size 2XL (75 - 83kg)</option>
-                      <option value="3XL">Size 3XL (84 - 92kg)</option>
-                      <option value="4XL">Size 4XL (93 - 100kg)</option>
-                      <option value="5XL">Size 5XL (101 - 110kg)</option>
-                      <option value="6XL">Size 6XL (Trên 110kg)</option>
+                      <option value="S">Size S</option>
+                      <option value="M">Size M</option>
+                      <option value="L">Size L</option>
+                      <option value="XL">Size XL</option>
+                      <option value="2XL">Size 2XL</option>
+                      <option value="3XL">Size 3XL</option>
+                      <option value="4XL">Size 4XL</option>
+                      <option value="5XL">Size 5XL</option>
+                      <option value="6XL">Size 6XL</option>
                     </select>
                   </div>
 
@@ -3742,7 +3742,7 @@
           }
 
           if (!registrationData.shirtSize) {
-            showToast("Vui lòng chọn Cỡ Áo (Size).", true);
+            showToast("Vui lòng chọn Cỡ Áo.", true);
             submitBtn.disabled = false;
             loader.style.display = "none";
             return;
@@ -3913,7 +3913,7 @@
         const shirtModelName = currentWinnerShirt?.name || currentConfig.name || "Áo đồng phục";
 
         const rows = [
-          ["STT", "Họ và Tên", "Mẫu Áo", "Cỡ Áo (Size)", "Số Áo", "Tên In Áo", "Ghi Chú", "Trạng Thái Đặt"]
+          ["STT", "Họ và Tên", "Mẫu Áo", "Cỡ Áo", "Số Áo", "Tên In Áo", "Ghi Chú", "Trạng Thái Đặt"]
         ];
 
         const sizeCounts = { S: 0, M: 0, L: 0, XL: 0, "2XL": 0, "3XL": 0, "4XL": 0, "5XL": 0, "6XL": 0, Khác: 0 };
@@ -3997,7 +3997,7 @@
 
         const shirtModelName = currentWinnerShirt?.name || currentConfig.name || "Áo đồng phục";
         const rows = [
-          ["STT", "Cỡ Áo (Size)", "Số In Sau Lưng", "Tên In Sau Lưng", "Ghi Chú", "Mẫu Áo"]
+          ["STT", "Cỡ Áo", "Số In Sau Lưng", "Tên In Sau Lưng", "Ghi Chú", "Mẫu Áo"]
         ];
 
         let stt = 1;
