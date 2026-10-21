@@ -10,6 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"
       rel="stylesheet"
@@ -571,6 +572,9 @@
           <button class="tab-button" onclick="switchUserTab('vote')" id="user-tab-vote">
             <span>🗳️</span> Bình Chọn Mẫu Áo
           </button>
+          <button class="tab-button" onclick="switchUserTab('chart')" id="user-tab-chart">
+            <span>📊</span> Biểu Đồ So Sánh
+          </button>
           <button class="tab-button" onclick="switchUserTab('form')" id="user-tab-form">
             <span>👕</span> Nhập Thông Tin Đăng Ký
           </button>
@@ -689,6 +693,9 @@
                   />
                 </div>
 
+                <!-- Banner kiểm tra công bằng (Chỉ Admin thấy khi có IP) -->
+                <div id="vote-log-admin-fairness-banner" class="hidden"></div>
+
                 <!-- Bảng hiển thị ai chọn mẫu nào -->
                 <div class="flex items-center justify-between text-[11px] text-gray-400 sm:hidden">
                   <span>👉 Vuốt ngang bảng để xem mẫu áo & thời gian</span>
@@ -701,6 +708,7 @@
                         <th class="px-3 py-2.5">Họ và Tên</th>
                         <th class="px-3 py-2.5">Mẫu Áo Đã Bình Chọn</th>
                         <th class="px-3 py-2.5">Thời Gian Vote</th>
+                        <th class="px-3 py-2.5 hidden" id="vote-log-ip-header">Địa Chỉ IP (Admin)</th>
                       </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-100" id="vote-log-tbody">
@@ -713,6 +721,166 @@
               <!-- Thông báo khi admin khóa xem sổ -->
               <div id="vote-log-locked-notice" class="hidden mt-3 p-3 bg-gray-50 border border-gray-200 rounded-xl text-center text-xs text-gray-500 font-medium">
                 🔒 Admin đã bật chế độ ẩn danh (Chỉ Admin mới có quyền xem sổ chi tiết ai chọn mẫu nào).
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: BIỂU ĐỒ SO SÁNH TRỰC QUAN -->
+        <div id="user-content-chart" class="hidden">
+          <div class="max-w-5xl mx-auto space-y-6">
+            <!-- Header giới thiệu tab -->
+            <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-custom border border-indigo-50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div>
+                <h2 class="text-base sm:text-lg font-black text-gray-900 flex items-center gap-2">
+                  <span class="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-sm shadow-sm">📊</span>
+                  Phân Tích & Biểu Đồ So Sánh Mẫu Áo
+                </h2>
+                <p class="text-xs text-gray-500 mt-1">
+                  Số liệu thống kê trực quan theo thời gian thực về mức độ yêu thích của các mẫu áo
+                </p>
+              </div>
+              <button
+                type="button"
+                onclick="switchUserTab('vote')"
+                class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center gap-1.5 shadow-md shadow-indigo-100 shrink-0 cursor-pointer"
+              >
+                <span>🗳️</span> Vào Bình Chọn Ngay
+              </button>
+            </div>
+
+            <!-- KPI Cards -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+              <!-- KPI 1: Đã vote -->
+              <div class="bg-white p-4 sm:p-5 rounded-2xl shadow-custom border border-indigo-50">
+                <div class="flex items-center justify-between text-indigo-600 mb-1.5">
+                  <span class="text-xs font-bold uppercase tracking-wider">Phiếu Đã Bầu</span>
+                  <span class="text-lg">🗳️</span>
+                </div>
+                <div class="text-xl sm:text-2xl font-black text-gray-900" id="chart-kpi-voted">0 / 0</div>
+                <div class="text-[11px] text-gray-500 mt-1 font-medium" id="chart-kpi-voted-percent">Đạt 0% sĩ số</div>
+              </div>
+
+              <!-- KPI 2: Mẫu dẫn đầu -->
+              <div class="bg-white p-4 sm:p-5 rounded-2xl shadow-custom border border-amber-50">
+                <div class="flex items-center justify-between text-amber-600 mb-1.5">
+                  <span class="text-xs font-bold uppercase tracking-wider">Mẫu Dẫn Đầu</span>
+                  <span class="text-lg">👑</span>
+                </div>
+                <div class="text-base sm:text-lg font-black text-gray-900 truncate" id="chart-kpi-leader-name">-</div>
+                <div class="text-[11px] text-amber-600 font-bold mt-1" id="chart-kpi-leader-votes">0 phiếu (0%)</div>
+              </div>
+
+              <!-- KPI 3: Khoảng cách dẫn đầu -->
+              <div class="bg-white p-4 sm:p-5 rounded-2xl shadow-custom border border-emerald-50">
+                <div class="flex items-center justify-between text-emerald-600 mb-1.5">
+                  <span class="text-xs font-bold uppercase tracking-wider">Cách Biệt Top 1 & 2</span>
+                  <span class="text-lg">⚡</span>
+                </div>
+                <div class="text-xl sm:text-2xl font-black text-gray-900" id="chart-kpi-gap">0 phiếu</div>
+                <div class="text-[11px] text-gray-500 mt-1 truncate" id="chart-kpi-gap-desc">-</div>
+              </div>
+
+              <!-- KPI 4: Chưa bình chọn -->
+              <div class="bg-white p-4 sm:p-5 rounded-2xl shadow-custom border border-purple-50">
+                <div class="flex items-center justify-between text-purple-600 mb-1.5">
+                  <span class="text-xs font-bold uppercase tracking-wider">Chưa Bình Chọn</span>
+                  <span class="text-lg">⏳</span>
+                </div>
+                <div class="text-xl sm:text-2xl font-black text-gray-900" id="chart-kpi-unvoted">0</div>
+                <div class="text-[11px] text-gray-500 mt-1 font-medium" id="chart-kpi-unvoted-percent">0% sĩ số</div>
+              </div>
+            </div>
+
+            <!-- Charts Container: Bar Chart & Donut Chart -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <!-- Bar Chart (chiếm 2 cột) -->
+              <div class="lg:col-span-2 bg-white p-5 sm:p-6 rounded-2xl shadow-custom border border-gray-100 flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-4">
+                    <div>
+                      <h3 class="font-bold text-gray-900 text-sm sm:text-base flex items-center gap-2">
+                        <span>📊</span> So Sánh Số Phiếu Từng Mẫu Áo
+                      </h3>
+                      <p class="text-xs text-gray-500 mt-0.5">Tương quan số lượt bình chọn giữa các mẫu áo</p>
+                    </div>
+                  </div>
+                  <div class="relative h-64 sm:h-72 w-full">
+                    <canvas id="vote-bar-chart"></canvas>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Donut Chart (chiếm 1 cột) -->
+              <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-custom border border-gray-100 flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-4">
+                    <div>
+                      <h3 class="font-bold text-gray-900 text-sm sm:text-base flex items-center gap-2">
+                        <span>🍩</span> Tỷ Lệ Thị Phần
+                      </h3>
+                      <p class="text-xs text-gray-500 mt-0.5">Phần trăm số phiếu của từng mẫu</p>
+                    </div>
+                  </div>
+                  <div class="relative h-64 sm:h-72 w-full flex items-center justify-center">
+                    <canvas id="vote-donut-chart"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bảng Xếp Hạng & Tiến Độ Trực Quan (Ranking Leaderboard) -->
+            <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-custom border border-gray-100">
+              <div class="flex items-center justify-between mb-4">
+                <div>
+                  <h3 class="font-bold text-gray-900 text-sm sm:text-base flex items-center gap-2">
+                    <span>🏆</span> Bảng Xếp Hạng Chi Tiết & Tỷ Lệ Bình Chọn
+                  </h3>
+                  <p class="text-xs text-gray-500 mt-0.5">Danh sách sắp xếp theo số phiếu giảm dần kèm thanh tiến độ</p>
+                </div>
+              </div>
+              <div id="chart-ranking-list" class="space-y-3">
+                <!-- Rendered by JS -->
+              </div>
+            </div>
+
+            <!-- Khối Kiểm Tra Độ Công Bằng (DÀNH RIÊNG CHO ADMIN) -->
+            <div id="admin-fairness-audit-section" class="hidden bg-gradient-to-br from-indigo-50/70 via-white to-slate-50 border border-indigo-200/80 p-5 sm:p-6 rounded-2xl shadow-custom space-y-4">
+              <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-indigo-100 pb-3">
+                <div class="flex items-center gap-2.5">
+                  <span class="text-2xl">🛡️</span>
+                  <div>
+                    <h3 class="font-extrabold text-sm sm:text-base text-gray-900 flex items-center gap-2">
+                      Kiểm Tra Tính Công Bằng (Chỉ Admin Thấy)
+                      <span class="bg-indigo-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Admin View</span>
+                    </h3>
+                    <p class="text-xs text-gray-500 mt-0.5">
+                      Hệ thống tự động ghi lại IP phiên vote đầu tiên để phát hiện bầu hộ hoặc spam phiếu
+                    </p>
+                  </div>
+                </div>
+                <div id="admin-audit-status-badge"></div>
+              </div>
+
+              <!-- Thống kê IP -->
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div class="bg-white p-3.5 rounded-xl border border-gray-200 shadow-xs">
+                  <div class="text-[11px] font-semibold text-gray-500">Tổng Phiếu Đã Bình Chọn</div>
+                  <div class="text-lg font-black text-gray-800" id="audit-total-votes">0 phiếu</div>
+                </div>
+                <div class="bg-white p-3.5 rounded-xl border border-gray-200 shadow-xs">
+                  <div class="text-[11px] font-semibold text-gray-500">Số Địa Chỉ IP Độc Nhất</div>
+                  <div class="text-lg font-black text-emerald-600" id="audit-unique-ips">0 địa chỉ IP</div>
+                </div>
+                <div class="bg-white p-3.5 rounded-xl border border-gray-200 shadow-xs">
+                  <div class="text-[11px] font-semibold text-gray-500">Phiếu Trùng Địa Chỉ IP</div>
+                  <div class="text-lg font-black text-amber-600" id="audit-duplicate-votes">0 phiếu</div>
+                </div>
+              </div>
+
+              <!-- Danh sách phát hiện trùng IP nếu có -->
+              <div id="admin-audit-duplicate-list" class="space-y-2">
+                <!-- Rendered by JS -->
               </div>
             </div>
           </div>
@@ -1438,6 +1606,82 @@
           .replace(/"/g, "&quot;")
           .replace(/'/g, "&#039;");
       }
+
+      // --- LẤY ĐỊA CHỈ IP CLIENT ĐỂ THEO DÕI TÍNH CÔNG BẰNG KHI VOTE ---
+      let cachedClientIp = null;
+      let isFetchingIp = false;
+
+      async function getClientIp() {
+        if (cachedClientIp) return cachedClientIp;
+        if (isFetchingIp) {
+          for (let i = 0; i < 6; i++) {
+            await new Promise((r) => setTimeout(r, 200));
+            if (cachedClientIp) return cachedClientIp;
+          }
+        }
+        isFetchingIp = true;
+
+        const fetchJsonWithTimeout = async (url, ms = 3000) => {
+          const controller = new AbortController();
+          const timer = setTimeout(() => controller.abort(), ms);
+          try {
+            const resp = await fetch(url, { signal: controller.signal });
+            clearTimeout(timer);
+            if (!resp.ok) throw new Error("HTTP " + resp.status);
+            return await resp.json();
+          } catch (e) {
+            clearTimeout(timer);
+            throw e;
+          }
+        };
+
+        try {
+          // Nguồn 1: api64.ipify.org (hỗ trợ cả IPv4 và IPv6)
+          const data = await fetchJsonWithTimeout("https://api64.ipify.org?format=json");
+          if (data && data.ip) {
+            cachedClientIp = String(data.ip).trim();
+            return cachedClientIp;
+          }
+        } catch (e1) {
+          try {
+            // Nguồn 2: api.ipify.org (IPv4 phổ biến)
+            const data = await fetchJsonWithTimeout("https://api.ipify.org?format=json");
+            if (data && data.ip) {
+              cachedClientIp = String(data.ip).trim();
+              return cachedClientIp;
+            }
+          } catch (e2) {
+            try {
+              // Nguồn 3: ipapi.co
+              const data = await fetchJsonWithTimeout("https://ipapi.co/json/");
+              if (data && data.ip) {
+                cachedClientIp = String(data.ip).trim();
+                return cachedClientIp;
+              }
+            } catch (e3) {
+              try {
+                // Nguồn 4: api.db-ip.com
+                const data = await fetchJsonWithTimeout("https://api.db-ip.com/v2/free/self");
+                if (data && data.ipAddress) {
+                  cachedClientIp = String(data.ipAddress).trim();
+                  return cachedClientIp;
+                }
+              } catch (e4) {
+                console.warn("Không thể lấy IP từ dịch vụ bên ngoài:", e4);
+              }
+            }
+          }
+        } finally {
+          isFetchingIp = false;
+        }
+
+        return cachedClientIp || "Chưa xác định";
+      }
+
+      // Khởi động lấy IP sớm trong nền
+      try {
+        getClientIp().catch(() => {});
+      } catch (e) {}
 
       window.openLightbox = function (src) {
         if (!src) return;
@@ -2780,7 +3024,7 @@
       // ==============================================================
 
       window.switchUserTab = function (tabName) {
-        const tabs = ["vote", "form", "table"];
+        const tabs = ["vote", "chart", "form", "table"];
         tabs.forEach((tab) => {
           document.getElementById(`user-content-${tab}`)?.classList.add("hidden");
           document.getElementById(`user-tab-${tab}`)?.classList.remove("active");
@@ -2791,6 +3035,8 @@
 
         if (tabName === "table") {
           filterTable(currentFilter);
+        } else if (tabName === "chart") {
+          renderVisualCharts();
         }
       };
 
@@ -2947,7 +3193,7 @@
         const votes = currentVotingData.votes || {};
         const shirts = getCampaignShirts();
 
-        // Kiểm tra quyền mở sổ
+        // Kiểm tra quyền mở sổ và quyền admin
         const isCreator = currentConfig && userId === currentConfig.creatorId;
         const allowLog = currentConfig.showVoteLog !== false || isCreator;
         const toggleContainer = document.getElementById("vote-log-toggle-container");
@@ -2966,16 +3212,33 @@
           if (subtitle) subtitle.textContent = "Bấm nút bên cạnh để mở hoặc ẩn sổ danh sách cụ thể từng bạn chọn mẫu nào";
         }
 
-        // Đếm vote
+        // Cập nhật hiển thị cột IP trên thead (Chỉ Admin mới thấy)
+        const ipHeader = document.getElementById("vote-log-ip-header");
+        if (ipHeader) {
+          if (isCreator) {
+            ipHeader.classList.remove("hidden");
+          } else {
+            ipHeader.classList.add("hidden");
+          }
+        }
+
+        // Đếm vote & xây dựng bản đồ IP nếu là Admin
         const shirtCounts = {};
         shirts.forEach(s => { shirtCounts[s.id] = 0; });
         let votedCount = 0;
+        const ipCounts = {};
 
         allNames.forEach(name => {
           const v = votes[safeKey(name)];
           if (v && v.shirtId) {
             votedCount++;
             if (shirtCounts[v.shirtId] !== undefined) shirtCounts[v.shirtId]++;
+            if (isCreator) {
+              const ip = v.firstVoteIp || v.lastVoteIp || v.ip || "Chưa xác định";
+              if (ip && ip !== "Chưa xác định" && ip !== "Không rõ") {
+                ipCounts[ip] = (ipCounts[ip] || 0) + 1;
+              }
+            }
           }
         });
 
@@ -2984,6 +3247,45 @@
         const ratioBadge = document.getElementById("vote-log-ratio-badge");
         if (ratioBadge) {
           ratioBadge.textContent = `Đã vote: ${votedCount} / ${allNames.length} học sinh`;
+        }
+
+        // Render Banner kiểm tra công bằng (Chỉ Admin thấy)
+        const fairnessBanner = document.getElementById("vote-log-admin-fairness-banner");
+        if (fairnessBanner) {
+          if (isCreator) {
+            fairnessBanner.classList.remove("hidden");
+            const dupIpList = Object.entries(ipCounts).filter(([_, c]) => c > 1);
+            let dupVotes = 0;
+            dupIpList.forEach(([_, c]) => { dupVotes += c; });
+
+            if (dupIpList.length > 0) {
+              fairnessBanner.innerHTML = `
+                <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-900 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 shadow-xs">
+                  <div class="flex items-center gap-2">
+                    <span class="text-base">⚠️</span>
+                    <span><strong>Kiểm tra công bằng (Admin):</strong> Phát hiện <strong>${dupVotes}</strong> lượt vote có cùng IP (${dupIpList.length} địa chỉ IP trùng lặp).</span>
+                  </div>
+                  <button type="button" onclick="switchUserTab('chart')" class="text-[11px] bg-amber-600 hover:bg-amber-700 text-white font-bold px-2.5 py-1 rounded-lg transition shrink-0 cursor-pointer">
+                    Xem Biểu Đồ & Audit 📊
+                  </button>
+                </div>
+              `;
+            } else if (votedCount > 0) {
+              fairnessBanner.innerHTML = `
+                <div class="p-2.5 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-800 flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="text-base">🛡️</span>
+                    <span><strong>Kiểm tra công bằng (Admin):</strong> Tất cả các lượt vote đều đến từ các địa chỉ IP độc lập.</span>
+                  </div>
+                  <span class="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">100% Độc Lập</span>
+                </div>
+              `;
+            } else {
+              fairnessBanner.innerHTML = "";
+            }
+          } else {
+            fairnessBanner.classList.add("hidden");
+          }
         }
 
         // Render Filter Chips
@@ -3051,12 +3353,15 @@
             name,
             hasVoted,
             chosenShirt,
-            timestamp: v?.timestamp || null
+            timestamp: v?.timestamp || null,
+            firstVoteIp: v?.firstVoteIp || v?.ip || "Chưa xác định",
+            lastVoteIp: v?.lastVoteIp || null
           });
         });
 
         if (displayList.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="4" class="text-center py-6 text-gray-400 text-xs">Không có dữ liệu phù hợp với bộ lọc.</td></tr>`;
+          const colSpan = isCreator ? 5 : 4;
+          tbody.innerHTML = `<tr><td colspan="${colSpan}" class="text-center py-6 text-gray-400 text-xs">Không có dữ liệu phù hợp với bộ lọc.</td></tr>`;
           return;
         }
 
@@ -3078,11 +3383,43 @@
             shirtHtml = `<span class="bg-red-50 text-red-600 border border-red-200 text-[11px] px-2 py-0.5 rounded-full font-bold">Chưa bình chọn</span>`;
           }
 
+          let ipColHtml = "";
+          if (isCreator) {
+            if (item.hasVoted) {
+              const ip = item.firstVoteIp;
+              const count = ipCounts[ip] || 0;
+              const hasChangedIp = item.lastVoteIp && item.lastVoteIp !== ip && item.lastVoteIp !== "Chưa xác định";
+              const titleText = hasChangedIp
+                ? `IP phiên vote đầu tiên: ${ip} | IP đổi vote: ${item.lastVoteIp}`
+                : `IP phiên vote đầu: ${ip}`;
+
+              if (count > 1) {
+                ipColHtml = `
+                  <td class="px-3 py-2 whitespace-nowrap">
+                    <div class="inline-flex items-center gap-1.5 font-mono text-[11px] font-semibold text-amber-800 bg-amber-50 px-2 py-0.5 rounded-lg border border-amber-200" title="${titleText}">
+                      <span>${escapeHtml(ip)}</span>
+                      <span class="bg-amber-500 text-white text-[9px] px-1.5 py-0.2 rounded-full font-bold">Trùng x${count}</span>
+                    </div>
+                  </td>
+                `;
+              } else {
+                ipColHtml = `
+                  <td class="px-3 py-2 whitespace-nowrap">
+                    <span class="font-mono text-[11px] text-gray-600 bg-gray-50 px-2 py-0.5 rounded-lg border border-gray-200" title="${titleText}">${escapeHtml(ip)}</span>
+                  </td>
+                `;
+              }
+            } else {
+              ipColHtml = `<td class="px-3 py-2 text-gray-400 font-mono text-[11px]">-</td>`;
+            }
+          }
+
           tr.innerHTML = `
             <td class="px-3 py-2 text-center text-gray-400 font-mono">${index + 1}</td>
             <td class="px-3 py-2 font-bold text-gray-800">${escapeHtml(item.name)}</td>
             <td class="px-3 py-2">${shirtHtml}</td>
             <td class="px-3 py-2 text-gray-400 whitespace-nowrap">${item.timestamp ? formatTimestamp(item.timestamp) : "-"}</td>
+            ${ipColHtml}
           `;
           tbody.appendChild(tr);
         });
@@ -3093,6 +3430,7 @@
 
         const isVoting = currentConfig.hasVoting === true;
         const voteTab = document.getElementById("user-tab-vote");
+        const chartTab = document.getElementById("user-tab-chart");
         const activeBanner = document.getElementById("voting-active-banner");
         const winnerBanner = document.getElementById("winner-announcement-banner");
         const formLockedNotice = document.getElementById("form-locked-notice");
@@ -3100,6 +3438,7 @@
 
         if (!isVoting) {
           voteTab.classList.add("hidden");
+          chartTab?.classList.add("hidden");
           activeBanner.classList.add("hidden");
           winnerBanner.classList.add("hidden");
           formLockedNotice.classList.add("hidden");
@@ -3109,6 +3448,7 @@
         }
 
         voteTab.classList.remove("hidden");
+        chartTab?.classList.remove("hidden");
         const closed = isVotingClosed();
 
         if (closed) {
@@ -3164,6 +3504,409 @@
 
         if (isVoteLogOpen) {
           renderVoteLogTable();
+        }
+      }
+
+      // ==============================================================
+      // BIỂU ĐỒ SO SÁNH TRỰC QUAN & AUDIT CÔNG BẰNG (CHART.JS)
+      // ==============================================================
+      let voteBarChartInstance = null;
+      let voteDonutChartInstance = null;
+
+      function renderVisualCharts() {
+        if (!currentConfig || !currentConfig.names) return;
+
+        const allNames = currentConfig.names || [];
+        const votes = currentVotingData.votes || {};
+        const shirts = getCampaignShirts();
+
+        // 1. Tổng hợp số vote cho từng mẫu
+        const shirtStats = shirts.map((s, idx) => ({
+          id: s.id,
+          name: s.name,
+          imageUrl: s.imageUrl,
+          index: idx + 1,
+          count: 0
+        }));
+
+        let votedCount = 0;
+        allNames.forEach((name) => {
+          const v = votes[safeKey(name)];
+          if (v && v.shirtId) {
+            votedCount++;
+            const found = shirtStats.find((s) => s.id === v.shirtId);
+            if (found) found.count++;
+          }
+        });
+
+        const totalStudents = allNames.length;
+        const unvotedCount = Math.max(0, totalStudents - votedCount);
+        const votedPercent = totalStudents > 0 ? Math.round((votedCount / totalStudents) * 100) : 0;
+        const unvotedPercent = totalStudents > 0 ? Math.round((unvotedCount / totalStudents) * 100) : 0;
+
+        // Sắp xếp mẫu áo theo số vote giảm dần
+        const sortedShirts = [...shirtStats].sort((a, b) => b.count - a.count);
+        const leader = sortedShirts[0];
+        const runnerUp = sortedShirts[1];
+
+        // 2. Cập nhật các thẻ KPI
+        const kpiVoted = document.getElementById("chart-kpi-voted");
+        const kpiVotedPct = document.getElementById("chart-kpi-voted-percent");
+        if (kpiVoted) kpiVoted.textContent = `${votedCount} / ${totalStudents}`;
+        if (kpiVotedPct) kpiVotedPct.textContent = `Đạt ${votedPercent}% sĩ số lớp`;
+
+        const kpiLeaderName = document.getElementById("chart-kpi-leader-name");
+        const kpiLeaderVotes = document.getElementById("chart-kpi-leader-votes");
+        if (kpiLeaderName) {
+          kpiLeaderName.textContent = leader && leader.count > 0 ? leader.name : "Chưa có";
+          kpiLeaderName.title = leader && leader.count > 0 ? leader.name : "";
+        }
+        if (kpiLeaderVotes) {
+          if (leader && leader.count > 0) {
+            const pct = votedCount > 0 ? Math.round((leader.count / votedCount) * 100) : 0;
+            kpiLeaderVotes.textContent = `${leader.count} phiếu (${pct}% tổng vote)`;
+          } else {
+            kpiLeaderVotes.textContent = `Chưa có lượt vote`;
+          }
+        }
+
+        const kpiGap = document.getElementById("chart-kpi-gap");
+        const kpiGapDesc = document.getElementById("chart-kpi-gap-desc");
+        if (kpiGap && kpiGapDesc) {
+          if (leader && runnerUp && leader.count > 0) {
+            const gap = leader.count - runnerUp.count;
+            kpiGap.textContent = `${gap} phiếu`;
+            if (gap === 0) {
+              kpiGapDesc.textContent = "Đang đồng hạng 1!";
+            } else {
+              kpiGapDesc.textContent = `Hơn mẫu "${runnerUp.name}"`;
+            }
+          } else if (leader && leader.count > 0) {
+            kpiGap.textContent = `${leader.count} phiếu`;
+            kpiGapDesc.textContent = "Chiếm ưu thế tuyệt đối";
+          } else {
+            kpiGap.textContent = "0 phiếu";
+            kpiGapDesc.textContent = "Chưa có lượt vote";
+          }
+        }
+
+        const kpiUnvoted = document.getElementById("chart-kpi-unvoted");
+        const kpiUnvotedPct = document.getElementById("chart-kpi-unvoted-percent");
+        if (kpiUnvoted) kpiUnvoted.textContent = `${unvotedCount}`;
+        if (kpiUnvotedPct) kpiUnvotedPct.textContent = `${unvotedPercent}% sĩ số chưa vote`;
+
+        // Bảng màu hiện đại cho biểu đồ
+        const palette = [
+          "#6366f1", // Indigo
+          "#06b6d4", // Cyan
+          "#10b981", // Emerald
+          "#f59e0b", // Amber
+          "#ec4899", // Pink
+          "#8b5cf6", // Purple
+          "#f97316", // Orange
+          "#14b8a6", // Teal
+          "#3b82f6", // Blue
+          "#ef4444"  // Red
+        ];
+
+        // 3. Render Chart.js Bar Chart
+        if (typeof Chart !== "undefined") {
+          const barCanvas = document.getElementById("vote-bar-chart");
+          if (barCanvas) {
+            const barCtx = barCanvas.getContext("2d");
+            if (voteBarChartInstance) {
+              voteBarChartInstance.destroy();
+              voteBarChartInstance = null;
+            }
+
+            const barLabels = shirtStats.map((s) => s.name);
+            const barData = shirtStats.map((s) => s.count);
+            const barBg = shirtStats.map((_, i) => palette[i % palette.length]);
+
+            voteBarChartInstance = new Chart(barCtx, {
+              type: "bar",
+              data: {
+                labels: barLabels,
+                datasets: [
+                  {
+                    label: "Số phiếu bầu",
+                    data: barData,
+                    backgroundColor: barBg,
+                    borderRadius: 8,
+                    borderSkipped: false,
+                    maxBarThickness: 48
+                  }
+                ]
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: { display: false },
+                  tooltip: {
+                    callbacks: {
+                      label: (ctx) => {
+                        const cnt = ctx.parsed.y;
+                        const pct = votedCount > 0 ? ((cnt / votedCount) * 100).toFixed(1) : 0;
+                        return ` ${cnt} phiếu (${pct}% tổng vote)`;
+                      }
+                    }
+                  }
+                },
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    ticks: {
+                      precision: 0,
+                      stepSize: 1,
+                      color: "#64748b",
+                      font: { size: 11 }
+                    },
+                    grid: {
+                      color: "#f1f5f9"
+                    }
+                  },
+                  x: {
+                    grid: { display: false },
+                    ticks: {
+                      color: "#334155",
+                      font: { weight: "600", size: 11 },
+                      callback: function (val) {
+                        const label = this.getLabelForValue(val);
+                        return label.length > 15 ? label.substring(0, 14) + "..." : label;
+                      }
+                    }
+                  }
+                }
+              }
+            });
+          }
+
+          // 4. Render Chart.js Donut Chart
+          const donutCanvas = document.getElementById("vote-donut-chart");
+          if (donutCanvas) {
+            const donutCtx = donutCanvas.getContext("2d");
+            if (voteDonutChartInstance) {
+              voteDonutChartInstance.destroy();
+              voteDonutChartInstance = null;
+            }
+
+            const hasAnyVote = votedCount > 0;
+            const donutLabels = hasAnyVote ? shirtStats.map((s) => s.name) : ["Chưa có lượt vote"];
+            const donutData = hasAnyVote ? shirtStats.map((s) => s.count) : [1];
+            const donutColors = hasAnyVote
+              ? shirtStats.map((_, i) => palette[i % palette.length])
+              : ["#e2e8f0"];
+
+            voteDonutChartInstance = new Chart(donutCtx, {
+              type: "doughnut",
+              data: {
+                labels: donutLabels,
+                datasets: [
+                  {
+                    data: donutData,
+                    backgroundColor: donutColors,
+                    borderWidth: 2,
+                    borderColor: "#ffffff",
+                    hoverOffset: 6
+                  }
+                ]
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: "68%",
+                plugins: {
+                  legend: {
+                    position: "bottom",
+                    labels: {
+                      boxWidth: 12,
+                      padding: 12,
+                      font: { size: 11, weight: "500" },
+                      color: "#475569"
+                    }
+                  },
+                  tooltip: {
+                    enabled: hasAnyVote,
+                    callbacks: {
+                      label: (ctx) => {
+                        const cnt = ctx.parsed;
+                        const pct = votedCount > 0 ? ((cnt / votedCount) * 100).toFixed(1) : 0;
+                        return ` ${ctx.label}: ${cnt} phiếu (${pct}%)`;
+                      }
+                    }
+                  }
+                }
+              }
+            });
+          }
+        }
+
+        // 5. Render Bảng Xếp Hạng & Tiến Độ Trực Quan (Ranking Leaderboard)
+        const rankingContainer = document.getElementById("chart-ranking-list");
+        if (rankingContainer) {
+          if (sortedShirts.length === 0) {
+            rankingContainer.innerHTML = `<p class="text-xs text-gray-400 py-4 text-center">Chưa có mẫu áo nào trong chiến dịch.</p>`;
+          } else {
+            let rankHtml = "";
+            sortedShirts.forEach((shirt, rankIdx) => {
+              const rank = rankIdx + 1;
+              const pctOfTotal = votedCount > 0 ? Math.round((shirt.count / votedCount) * 100) : 0;
+              const isFirst = rank === 1 && shirt.count > 0;
+
+              let rankBadge = "";
+              if (rank === 1 && shirt.count > 0) {
+                rankBadge = `<span class="w-7 h-7 rounded-xl bg-amber-500 text-white flex items-center justify-center font-black text-sm shadow-sm">👑</span>`;
+              } else if (rank === 2 && shirt.count > 0) {
+                rankBadge = `<span class="w-7 h-7 rounded-xl bg-slate-400 text-white flex items-center justify-center font-black text-xs shadow-sm">2</span>`;
+              } else if (rank === 3 && shirt.count > 0) {
+                rankBadge = `<span class="w-7 h-7 rounded-xl bg-amber-700/80 text-white flex items-center justify-center font-black text-xs shadow-sm">3</span>`;
+              } else {
+                rankBadge = `<span class="w-7 h-7 rounded-xl bg-gray-100 text-gray-500 flex items-center justify-center font-bold text-xs">${rank}</span>`;
+              }
+
+              const barColor = palette[shirt.index ? (shirt.index - 1) % palette.length : rankIdx % palette.length];
+
+              rankHtml += `
+                <div class="p-3 sm:p-4 rounded-xl border ${
+                  isFirst ? "border-amber-300 bg-amber-50/30" : "border-gray-200 bg-white"
+                } transition hover:shadow-sm">
+                  <div class="flex items-center justify-between gap-3 mb-2">
+                    <div class="flex items-center gap-3 min-w-0">
+                      ${rankBadge}
+                      <div class="w-10 h-10 rounded-lg overflow-hidden border bg-gray-50 shrink-0 cursor-pointer shadow-xs" onclick="openLightbox('${shirt.imageUrl}')" title="Bấm để xem ảnh phóng to">
+                        <img src="${shirt.imageUrl}" class="w-full h-full object-cover" />
+                      </div>
+                      <div class="min-w-0">
+                        <div class="font-bold text-sm text-gray-900 truncate flex items-center gap-1.5">
+                          <span>${escapeHtml(shirt.name)}</span>
+                          ${isFirst ? '<span class="text-[10px] bg-amber-100 text-amber-800 font-bold px-1.5 py-0.5 rounded-full border border-amber-200">Dẫn Đầu</span>' : ''}
+                        </div>
+                        <div class="text-[11px] text-gray-500">Mẫu #${shirt.index || rank}</div>
+                      </div>
+                    </div>
+                    <div class="text-right shrink-0">
+                      <div class="font-black text-sm sm:text-base text-gray-900">${shirt.count} <span class="text-xs font-medium text-gray-500">phiếu</span></div>
+                      <div class="text-[11px] font-bold text-indigo-600">${pctOfTotal}%</div>
+                    </div>
+                  </div>
+                  <!-- Thanh tiến độ phần trăm trực quan -->
+                  <div class="w-full bg-gray-100 h-2.5 rounded-full overflow-hidden">
+                    <div class="h-full rounded-full transition-all duration-500" style="width: ${pctOfTotal}%; background-color: ${barColor};"></div>
+                  </div>
+                </div>
+              `;
+            });
+            rankingContainer.innerHTML = rankHtml;
+          }
+        }
+
+        // 6. Khu vực Kiểm Tra Độ Công Bằng (DÀNH RIÊNG CHO ADMIN)
+        const isCreator = currentConfig && userId === currentConfig.creatorId;
+        const auditSection = document.getElementById("admin-fairness-audit-section");
+        if (auditSection) {
+          if (!isCreator) {
+            auditSection.classList.add("hidden");
+          } else {
+            auditSection.classList.remove("hidden");
+
+            // Gom nhóm IP
+            const ipMap = {};
+            allNames.forEach((name) => {
+              const v = votes[safeKey(name)];
+              if (v && v.shirtId) {
+                const ip = v.firstVoteIp || v.lastVoteIp || v.ip || "Chưa xác định";
+                if (!ipMap[ip]) ipMap[ip] = [];
+                const sObj = shirts.find((s) => s.id === v.shirtId);
+                ipMap[ip].push({
+                  name: name,
+                  shirtName: sObj ? sObj.name : "Không rõ",
+                  timestamp: v.firstVoteTimestamp || v.timestamp
+                });
+              }
+            });
+
+            const uniqueIpCount = Object.keys(ipMap).length;
+            const duplicates = Object.entries(ipMap).filter(([ip, list]) => ip !== "Chưa xác định" && list.length > 1);
+            let dupVotesCount = 0;
+            duplicates.forEach(([_, list]) => {
+              dupVotesCount += list.length;
+            });
+
+            const auditTotalEl = document.getElementById("audit-total-votes");
+            const auditUniqueEl = document.getElementById("audit-unique-ips");
+            const auditDupEl = document.getElementById("audit-duplicate-votes");
+            if (auditTotalEl) auditTotalEl.textContent = `${votedCount} phiếu`;
+            if (auditUniqueEl) auditUniqueEl.textContent = `${uniqueIpCount} địa chỉ IP`;
+            if (auditDupEl) auditDupEl.textContent = `${dupVotesCount} phiếu (${duplicates.length} IP trùng)`;
+
+            const statusBadge = document.getElementById("admin-audit-status-badge");
+            if (statusBadge) {
+              if (duplicates.length > 0) {
+                statusBadge.innerHTML = `<span class="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full border border-amber-300">⚠️ Phát hiện ${dupVotesCount} phiếu trùng IP</span>`;
+              } else {
+                statusBadge.innerHTML = `<span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full border border-emerald-300">✅ 100% IP Độc Lập</span>`;
+              }
+            }
+
+            const dupListContainer = document.getElementById("admin-audit-duplicate-list");
+            if (dupListContainer) {
+              if (duplicates.length === 0) {
+                dupListContainer.innerHTML = `
+                  <div class="p-3.5 bg-emerald-50/70 border border-emerald-200 rounded-xl text-xs text-emerald-800 flex items-center gap-2">
+                    <span>✨</span>
+                    <span><strong>Tuyệt vời!</strong> Tất cả các bạn học sinh đã bình chọn từ các thiết bị / địa chỉ IP khác nhau. Không có dấu hiệu vote hộ hoặc spam.</span>
+                  </div>
+                `;
+              } else {
+                let dupHtml = `
+                  <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-900 mb-2">
+                    <p class="font-bold flex items-center gap-1.5">
+                      <span>💡</span> Lưu ý dành cho Admin:
+                    </p>
+                    <p class="mt-0.5 text-[11px] text-amber-800 leading-relaxed">
+                      Nếu học sinh dùng chung mạng Wi-Fi tại trường học, ký túc xá hoặc phát hotspot cho nhau, địa chỉ IP public có thể trùng nhau một cách bình thường. Admin hãy đối chiếu thời gian vote và liên hệ trực tiếp với các bạn dưới đây nếu nghi ngờ:
+                    </p>
+                  </div>
+                `;
+
+                duplicates.forEach(([ip, list]) => {
+                  dupHtml += `
+                    <div class="bg-white p-3.5 rounded-xl border border-amber-200 shadow-xs">
+                      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-1.5 mb-2 border-b border-gray-100 pb-2">
+                        <div class="flex items-center gap-2 font-mono text-xs font-bold text-gray-800">
+                          <span class="bg-amber-500 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">IP TRÙNG</span>
+                          <span>${escapeHtml(ip)}</span>
+                        </div>
+                        <span class="text-xs font-bold text-amber-700 bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200">
+                          ${list.length} học sinh vote từ IP này
+                        </span>
+                      </div>
+                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                        ${list
+                          .map(
+                            (voter) => `
+                          <div class="p-2 bg-gray-50 rounded-lg flex items-center justify-between">
+                            <div>
+                              <div class="font-bold text-gray-800">${escapeHtml(voter.name)}</div>
+                              <div class="text-[11px] text-gray-500">Mẫu: <span class="font-semibold text-indigo-600">${escapeHtml(voter.shirtName)}</span></div>
+                            </div>
+                            <div class="text-[10px] text-gray-400 font-mono text-right">
+                              ${voter.timestamp ? formatTimestamp(voter.timestamp) : "-"}
+                            </div>
+                          </div>
+                        `
+                          )
+                          .join("")}
+                      </div>
+                    </div>
+                  `;
+                });
+
+                dupListContainer.innerHTML = dupHtml;
+              }
+            }
+          }
         }
       }
 
@@ -3439,10 +4182,39 @@
         const voterKey = safeKey(selectedName);
         const voteRef = ref(db, `${getVotingPath(currentId)}/votes/${voterKey}`);
 
+        // Lấy địa chỉ IP của thiết bị
+        let clientIp = "Chưa xác định";
+        try {
+          clientIp = await getClientIp();
+        } catch (e) {
+          console.warn("Không thể lấy IP lúc vote:", e);
+        }
+
+        // Lấy thông tin vote cũ nếu học sinh đã từng vote
+        const existingVote = currentVotingData?.votes ? currentVotingData.votes[voterKey] : null;
+
+        // BẢO TỒN IP PHIÊN VOTE ĐẦU TIÊN (không bao giờ bị ghi đè khi đổi vote)
+        const firstVoteIp = (existingVote && existingVote.firstVoteIp)
+          ? existingVote.firstVoteIp
+          : (existingVote && existingVote.ip)
+            ? existingVote.ip
+            : (clientIp && clientIp !== "Chưa xác định")
+              ? clientIp
+              : "Chưa xác định";
+
+        const firstVoteTimestamp = (existingVote && existingVote.firstVoteTimestamp)
+          ? existingVote.firstVoteTimestamp
+          : (existingVote && existingVote.timestamp)
+            ? existingVote.timestamp
+            : new Date().toISOString();
+
         try {
           await set(voteRef, {
             studentName: selectedName,
             shirtId: shirtId,
+            firstVoteIp: firstVoteIp,
+            lastVoteIp: clientIp,
+            firstVoteTimestamp: firstVoteTimestamp,
             timestamp: new Date().toISOString()
           });
 
@@ -4169,6 +4941,10 @@
           if (isVoteLogOpen) {
             renderVoteLogTable();
           }
+          const chartEl = document.getElementById("user-content-chart");
+          if (chartEl && !chartEl.classList.contains("hidden")) {
+            renderVisualCharts();
+          }
         });
 
         const configLiveRef = ref(db, `/artifacts/${appId}/users/${currentConfig.creatorId}/link_configs/${id}`);
@@ -4176,6 +4952,10 @@
           if (snap.exists()) {
             currentConfig = snap.val();
             refreshUserPanelUI();
+            const chartEl = document.getElementById("user-content-chart");
+            if (chartEl && !chartEl.classList.contains("hidden")) {
+              renderVisualCharts();
+            }
           }
         });
 
@@ -4188,6 +4968,8 @@
         const reqTab = params.get("tab");
         if (reqTab === "table") {
           switchUserTab("table");
+        } else if (reqTab === "chart") {
+          switchUserTab("chart");
         } else if (currentConfig.hasVoting && !isVotingClosed()) {
           switchUserTab("vote");
         } else {
